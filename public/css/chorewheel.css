@@ -1,0 +1,9 @@
+table.center {
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+table th {
+    text-align: center;
+}
