@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+<table class="mdl-data-table mdl-js-data-table">
+    <thead>
+        <tr>
+            <th>Chore</th>
+            <th>Assigned To</th>
+            <th>Points</th>
+            <th>Due</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for chore in chores %}
+            <tr>
+                <td>{{ chore.name }}</td>
+                <td>{{ chore.assigned_to }}</td>
+                <td>{{ chore.points }}</td>
+                <td>{{ chore.due }}</td>
+                <td>
+                    <button class="mdl-button mdl-js-button">
+                        <i class="material-icons">edit</i>
+                    </button>
+                    <button class="mdl-button mdl-js-button">
+                        <i class="material-icons">delete</i>
+                    </button>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

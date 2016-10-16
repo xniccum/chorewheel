@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+<table class="mdl-data-table mdl-js-data-table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Points</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for member in members %}
+            <tr>
+                <td>{{ member.name }}</td>
+                <td>{{ member.email }}</td>
+                <td>{{ memeber.points }}</td>
+                <td>
+                    <button class="mdl-button mdl-js-button">
+                        <i class="material-icons">edit</i>
+                    </button>
+                    <button class="mdl-button mdl-js-button">
+                        <i class="material-icons">delete</i>
+                    </button>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
