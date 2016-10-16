@@ -1,8 +1,19 @@
 from google.appengine.ext import ndb
 
 
-class Kid(ndb.Model):
+class User(ndb.Model):
+    email = ndb.StringProperty()
+    groups = ndb.KeyProperty(kind='Group', repeated=True)
+    
+class Group(ndb.Model):
+    admins = ndb.KeyProperty(kind='User', repeated=True)
+    members = ndb.KeyProperty(kind='User', repeated=True)
     name = ndb.StringProperty()
-    month = ndb.StringProperty()
-    day = ndb.StringProperty()
-    year = ndb.StringProperty()
+
+class Chore(ndb.Model):
+    name = ndb.StringProperty()
+    due = ndb.DateTimeProperty()
+    frequency = ndb.StringProperty()
+    points = ndb.IntegerProperty()
+    group_id = ndb.KeyProperty(kind='Group')
+    assigned_to = ndb.KeyProperty(kind='User')
