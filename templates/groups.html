@@ -1,35 +1,93 @@
-{% extends "templates/base.html" %}
+{% extends "templates/base.html" %} {% block content %}
+<div class="container">
+	<table
+		class="mdl-data-table mdl-js-data-table mdl-shadow--2dp center">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Upcoming</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for group in groups %}
+			<tr>
+				<td class="group-id hidden">{{ group.key.urlsafe() }}</td>
+				<td class="group-name">{{ group.name }}</td>
+				<td></td>
+				<td>
+					<button class="mdl-button mdl-js-button groups-edit-button">
+						<i class="material-icons">edit</i>
+					</button>
+					<button class="mdl-button mdl-js-button groups-delete-button">
+						<i class="material-icons">delete</i>
+					</button>
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 
-{% block content %}
-    <div class="container">
-        <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp center">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Upcoming</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for group in groups %}
-                    <tr>
-                        <td>{{ group.name }}</td>
-                        <td></td>
-                        <td>
-                            <button class="mdl-button mdl-js-button">
-                                <i class="material-icons">edit</i>
-                            </button>
-                            <button class="mdl-button mdl-js-button">
-                                <i class="material-icons">delete</i>
-                            </button>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+	<!-- FAB button with ripple -->
+	<button
+		id="groups-add-button"
+		class="bottom-right-fab mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
+		<i class="material-icons">add</i>
+	</button>
+</div>
 {% endblock %}
 
 {% block modals %}
+
+<dialog id="groups-add-dialog" class="mdl-dialog">
+	<h4 class="mdl-dialog__title">New Group</h4>
+	<form action="/add-group" method="post">
+		<div class="mdl-dialog__content">
+			<div
+				class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+				<input class="mdl-textfield__input" type="text" name="name">
+				<label class="mdl-textfield__label" for="name">Name</label>
+			</div>
+		</div>
+		<div class="mdl-dialog__actions">
+			<button type="submit" class="mdl-button">Create</button>
+			<button type="button" class="mdl-button close">Cancel</button>
+		</div>
+	</form>
+</dialog>
+
+<dialog id="groups-edit-dialog" class="mdl-dialog">
+	<h4 class="mdl-dialog__title">Edit Group</h4>
+	<form action="/edit-group" method="post">
+		<div class="mdl-dialog__content">
+			<input style="display: none;" type="text" name="key" id="groups-edit-key">
+			<div
+				id="groups-edit-name"
+				class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+				<input class="mdl-textfield__input" type="text" name="name">
+				<label class="mdl-textfield__label" for="name">Name</label>
+			</div>
+		</div>
+		<div class="mdl-dialog__actions">
+			<button type="button" class="mdl-button">Save</button>
+			<button type="button" class="mdl-button close">Cancel</button>
+		</div>
+	</form>
+</dialog>
+
+<dialog id="groups-delete-dialog" class="mdl-dialog">
+	<h4 class="mdl-dialog__title">Delete Group?</h4>
+	<form action="/delete-group" method="post">
+		<div class="mdl-dialog__content">
+			<input style="display: none;" type="text" name="key" id="groups-delete-key">
+			<p>Are you sure you want to delete the group <span class="group-name"></span></p>
+			<p style="display: none;" id="delete-id"></p>
+		</div>
+		<div class="mdl-dialog__actions">
+			<button type="submit" class="mdl-button">Delete</button>
+			<button type="button" class="mdl-button close">Cancel</button>
+		</div>
+	</form>
+</dialog>
 
 {% endblock %}

@@ -1,3 +1,7 @@
+html, body {
+	height: 100%;
+}
+
 table.center {
     width: 80%;
     margin-left: 10%;
@@ -6,4 +10,28 @@ table.center {
 
 table th {
     text-align: center;
+}
+
+.bottom-right-fab {
+	position: absolute;
+	top: 85%;
+	right: 5%;
+	z-index: 999;
+}
+
+.container {
+	width: 95%;
+	margin-right: auto;
+	margin-left: auto;
+	padding-right: 6px;
+	padding-left: 6px;
+}
+
+.container:before, .container:after {
+	content: " ";
+	display: table;
+}
+
+.container:after {
+	clear: both;
 }
