@@ -15,5 +15,6 @@ class Chore(ndb.Model):
     due = ndb.DateTimeProperty()
     frequency = ndb.StringProperty()
     points = ndb.IntegerProperty()
+    readyForApproval = ndb.BooleanProperty()
     group_id = ndb.KeyProperty(kind='Group')
     assigned_to = ndb.KeyProperty(kind='User')
