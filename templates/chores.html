@@ -1,6 +1,28 @@
 {% extends "base.html" %}
 
 {% block content %}
+<button
+	id="chores-add-chore"
+	class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary">
+	<i class="material-icons">add</i>
+  	Add Chore
+</button>
+
+<button
+	id="chores-add-member"
+	class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+	<i class="material-icons">add</i>
+  	Add Member
+</button>
+
+<div style="display: inline;" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fullwidth">
+    <input class="mdl-textfield__input" type="text" id="current-view" name="current-view" tabIndex="-1" data-val="chores"/>
+    <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu" for="current-view">
+    	<li class="mdl-menu__item" data-val="chores"><a href="/chores?groupkey={{ groupkey.urlsafe() }}">Chores</a></li>
+        <li class="mdl-menu__item" data-val="members"><a href="/members?groupkey={{ groupkey.urlsafe() }}">Members</a></li>
+    </ul>
+</div>
+
 <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp center">
         <thead>
             <tr>
@@ -14,15 +36,26 @@
         <tbody>
             {% for chore in chores %}
                 <tr>
-                    <td>{{ chore.name }}</td>
-                    <td>{{ chore.assigned_to }}</td>
-                    <td>{{ chore.points }}</td>
-                    <td>{{ chore.due }}</td>
+                	<td class="chore-key hidden">{{ chore.key.urlsafe() }}</td>
+                	<td class="chore-frequency hidden">{{ chore.frequency }}</td>
+                    <td class="chore-name">{{ chore.name }}</td>
+                    <td>{{ chore.assigned_to_name }}</td>
+                    <td class="chore-points">{{ chore.points }}</td>
+                    <td class="chore-due">{{ chore.due }}</td>
                     <td>
-                        <button class="mdl-button mdl-js-button">
-                            <i class="material-icons">edit</i>
+                        <button class="mdl-button mdl-js-button chores-edit-button">
+                            <i class="material-icons">mode edit</i>
                         </button>
-                        <button class="mdl-button mdl-js-button">
+                        {% if (chore.assigned_to and chore.assigned_to == {{ user_key }} and not chore.readyForApproval) %}
+                        <button class="mdl-button mdl-js-button mark-for-approval">
+                        	<i class="material-icons">done</i>
+                        </button>
+                        {% elif (chore.assigned_to and chore.assigned_to != {{ user_key }} and chore.readyForApproval) %}
+                        <button class="mdl-button mdl-js-button mark-approved">
+                        	<i class="material-icons">done</i>
+                        </button>
+                        {% endif %}
+                        <button class="mdl-button mdl-js-button chores-delete-button">
                             <i class="material-icons">delete</i>
                         </button>
                     </td>
@@ -39,6 +72,7 @@
         <h4 class="mdl-dialog__title">New Chore</h4>
         <form action="/add-chore" method="post">
             <div class="mdl-dialog__content">
+            	<input style="display: none;" type="text" name="group_id" val="{{ groupkey }}">
                 <div
                     class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input class="mdl-textfield__input" type="text" name="name">
@@ -52,14 +86,17 @@
                 </div>
             </div>
             <div id="list-select" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fullwidth">
-                <input class="mdl-textfield__input" type="text" id="to_list" name="to_list" tabIndex="-1"/>
-                <label class="mdl-textfield__label" for="to_list">Choose a list</label>
-                <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu" for="to_list">
-                    <li class="mdl-menu__item" data-val="{{contact_list.key.urlsafe()}}">{{ contact_list.name }}</li>
+                <input class="mdl-textfield__input" type="text" id="frequency" name="frequency" tabIndex="-1"/>
+                <label class="mdl-textfield__label" for="frequency">Frequency</label>
+                <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu" for="frequency">
+                	<li class="mdl-menu__item" data-val="1 day">Every Day</li>
+                    <li class="mdl-menu__item" data-val="1 week">Every Week</li>
+                    <li class="mdl-menu__item" data-val="2 week">Every 2 Weeks</li>
+                    <li class="mdl-menu__item" data-val="1 month">Every Month</li>
                 </ul>
             </div>
             <div class="mdl-textfield mdl-js-textfield">
-                <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="points">
+                <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="points" name="points">
                 <label class="mdl-textfield__label" for="points">Points</label>
                 <span class="mdl-textfield__error">Input is not a number!</span>
             </div>
@@ -70,51 +107,76 @@
         </form>
     </dialog>
 
-    <dialog name="add-chore" class="mdl-dialog">
+    <dialog id="chores-add-member-dialog" class="mdl-dialog">
         <h4 class="mdl-dialog__title"><i class="material-icons">add</i>Invite Member</h4>
         <div class="mdl-dialog__content">
-            <form action="#" method="post">
-                Due:<input type="date" name="chore-due"><br>
-                Frequency:<select name="chore-name">
-                    <option value="everyday">Everyday</option>
-                    <option value="every-other-day">Every Other Day</option>
-                    <option value="weekly">Every Week</option>
-                    <option value="bimonthly">Bimonthly</option>
-                    <option value="monthly">Monthly</option>
-                </select><br>
-                Points:<input type="number" name="chore-points"><br>
-                <div class="mdl-dialog__actions mdl-dialog__actions--full-width">
-                  <button type="submit" class="mdl-button">Invite</button>
-                  <button type="button" class="mdl-button close">Cancel</button>
-                </div>
+            <form action="/add-member" method="post">
+                <div class="mdl-dialog__content">
+	                <div
+	                    class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+	                    <input class="mdl-textfield__input" type="text" name="email">
+	                    <label class="mdl-textfield__label" for="email">Email</label>
+	                </div>
+           		</div>
+           		<div class="mdl-dialog__content">
+	           		<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="is_admin">
+						<span class="mdl-checkbox__label">Admin?</span>
+						<input type="checkbox" id="is_admin" class="mdl-checkbox__input">
+					</label>
+				</div>
+				<div class="mdl-dialog__actions">
+	                <button type="submit" class="mdl-button">Invite</button>
+	                <button type="button" class="mdl-button close">Cancel</button>
+	            </div>
             </form>
         </div>
     </dialog>
 
-    <dialog name="edit-member" class="mdl-dialog">
-        <h4 class="mdl-dialog__title">Edit Member</h4>
+    <dialog id="chores-edit-dialog" class="mdl-dialog">
+        <h4 class="mdl-dialog__title">Edit Chore</h4>
         <div class="mdl-dialog__content">
             <form method="post">
-                Name:<input type="text" name="chore-name"><br>
-                Due:<input type="date" name="chore-due"><br>
-                Frequency:<select name="chore-name">
-                    <option value="everyday">Everyday</option>
-                    <option value="every-other-day">Every Other Day</option>
-                    <option value="weekly">Every Week</option>
-                    <option value="bimonthly">Bimonthly</option>
-                    <option value="monthly">Monthly</option>
-                </select><br>
-                Points:<input type="number" name="chore-points"><br>
-                <div class="mdl-dialog__actions mdl-dialog__actions--full-width">
-                  <button type="submit" class="mdl-button">Invite</button>
-                  <button type="button" class="mdl-button close">Cancel</button>
-                </div>
+                <div class="mdl-dialog__content">
+	            	<input style="display: none;" type="text" name="group_id" value="{{ groupkey }}">
+	            	<input style="display: none;" type="text" name="chore_id" id="chores-edit-key">
+	                <div
+	                	id="chores-edit-name"
+	                    class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+	                    <input class="mdl-textfield__input" type="text" name="name">
+	                    <label class="mdl-textfield__label" for="name">Name</label>
+	                </div>
+	            </div>
+	            <div class="scheduled-picker">
+	                <div id="edit-date-time-field" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+	                    <input class="mdl-textfield__input" type="text" name="due">
+	                    <label class="mdl-textfield__label" for="send_date_time">Due date / time</label>
+	                </div>
+	            </div>
+	            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fullwidth">
+	                <input class="mdl-textfield__input" type="text" id="frequency" name="frequency" tabIndex="-1"/>
+	                <label class="mdl-textfield__label" for="frequency">Frequency</label>
+	                <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu" for="frequency">
+	                	<li class="mdl-menu__item" data-val="1 day">Every Day</li>
+	                    <li class="mdl-menu__item" data-val="1 week">Every Week</li>
+	                    <li class="mdl-menu__item" data-val="2 week">Every 2 Weeks</li>
+	                    <li class="mdl-menu__item" data-val="1 month">Every Month</li>
+	                </ul>
+	            </div>
+	            <div id="chores-edit-points" class="mdl-textfield mdl-js-textfield">
+	                <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="points" name="points">
+	                <label class="mdl-textfield__label" for="points">Points</label>
+	                <span class="mdl-textfield__error">Input is not a number!</span>
+	            </div>
+	            <div class="mdl-dialog__actions">
+	                <button type="submit" class="mdl-button">Create</button>
+	                <button type="button" class="mdl-button close">Cancel</button>
+	            </div>
             </form>
         </div>
     </dialog>
 
     <dialog id="chores-delete-dialog" class="mdl-dialog">
-        <h4 class="mdl-dialog__title">Delete Group?</h4>
+        <h4 class="mdl-dialog__title">Delete Chore?</h4>
         <form action="/delete-chore" method="post">
             <div class="mdl-dialog__content">
                 <input style="display: none;" type="text" name="key" id="chores-delete-key">

@@ -13,7 +13,7 @@
 			{% for group in groups %}
 			<tr>
 				<td class="group-id hidden">{{ group.key.urlsafe() }}</td>
-				<td class="group-name">{{ group.name }}</td>
+				<td class="group-name"><a href="/chores?groupkey={{ group.key.urlsafe() }}">{{ group.name }}</a></td>
 				<td></td>
 				<td>
 					<button class="mdl-button mdl-js-button groups-edit-button">

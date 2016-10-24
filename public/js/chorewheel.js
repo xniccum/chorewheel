@@ -43,7 +43,52 @@ rh.chorewheel.groupsInit = function() {
 		
 		document.querySelector("#groups-delete-dialog").showModal();
 	});
-}
+};
+
+// Chores page init
+rh.chorewheel.choresInit = function() {
+	// Initialize the date picker widget.
+	$("input[name=due]").bootstrapMaterialDatePicker({
+		format : 'MM-DD-YYYY hh:mm A',
+		shortTime : true
+	});
+	
+	$("#chores-add-chore").click(function() {
+		document.querySelector("#chores-add-dialog").showModal();
+		$("#chores-add-dialog input[name=name]").val("");
+		$("#chores-add-dialog input[name=due]").val("");
+		$("#chores-add-dialog input[name=frequency]").val("");
+		$("#chores-add-dialog input[name=points]").val("");
+	});
+	
+	$("#chores-add-member").click(function() {
+		document.querySelector("#chores-add-member-dialog").showModal();
+		$("#chores-add-member-dialog input[name=email]").val("");
+	});
+	
+	$(".chores-edit-button").click(function() {
+		var key = $(this).closest("tr").find(".chore-key").html();
+		var name = $(this).closest("tr").find(".chore-name").html();
+		var due = $(this).closest("tr").find(".chore-due").html();
+		var frequency = $(this).closest("tr").find(".chore-frequency").html();
+		var points = $(this).closest("tr").find(".chore-points").html();
+		
+		document.querySelector("#chores-edit-dialog").showModal();
+
+		$("#chores-edit-key").val(key);
+		document.querySelector("#chores-edit-name").MaterialTextfield.change(name);
+		document.querySelector("#chores-edit-due").MaterialTextfield.change(due);
+		document.querySelector("#chores-edit-points").MaterialTextfield.change(points);
+		$("#chores-edit-dialog input[name=frequency]").attr("data-val", frequency);
+	});
+	
+	$(".chores-delete-button").click(function() {
+		var key = $(this).closest("tr").find(".chore-key").html();
+		$("#chores-delete-key").val(key);
+		
+		document.querySelector("#chores-delete-dialog").showModal();
+	});
+};
 
 // Keep at end of file. Call init functions
 $(document).ready(function() {
