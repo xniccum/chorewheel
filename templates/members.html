@@ -1,29 +1,86 @@
 {% extends "base.html" %}
 
-<table class="mdl-data-table mdl-js-data-table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Points</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for member in members %}
+{% block content %}
+    <table class="mdl-data-table mdl-js-data-table">
+        <thead>
             <tr>
-                <td>{{ member.name }}</td>
-                <td>{{ member.email }}</td>
-                <td>{{ memeber.points }}</td>
-                <td>
-                    <button class="mdl-button mdl-js-button">
-                        <i class="material-icons">edit</i>
-                    </button>
-                    <button class="mdl-button mdl-js-button">
-                        <i class="material-icons">delete</i>
-                    </button>
-                </td>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Points</th>
+                <th>Actions</th>
             </tr>
-        {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            {% for member in members %}
+                <tr>
+                    <td>{{ member.name }}</td>
+                    <td>{{ member.email }}</td>
+                    <td>{{ memeber.points }}</td>
+                    <td>
+                        <button class="mdl-button mdl-js-button">
+                            <i class="material-icons">edit</i>
+                        </button>
+                        <button class="mdl-button mdl-js-button">
+                            <i class="material-icons">delete</i>
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block modals %}
+    <dialog id="members-add-dialog" class="mdl-dialog">
+        <h4 class="mdl-dialog__title">New Member</h4>
+        <form action="/add-member" method="post">
+            <div class="mdl-dialog__content">
+                <div
+                    class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="text" name="name">
+                    <label class="mdl-textfield__label" for="name">Member</label>
+                </div>
+                <label for="member_admin" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                  <input type="checkbox" id="member_admin" class="mdl-checkbox__input">
+                  <span class="mdl-checkbox__label">Admin</span>
+                </label>
+            </div>
+            <div class="mdl-dialog__actions">
+                <button type="submit" class="mdl-button">Invite</button>
+                <button type="button" class="mdl-button close">Cancel</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog id="members-edit-dialog" class="mdl-dialog">
+        <h4 class="mdl-dialog__title">Edit Member</h4>
+        <form action="/edit-member" method="post">
+            <div class="mdl-dialog__content">
+                <input style="display: none;" type="text" name="key" id="members-edit-key">
+                <label id="member-edit-admin" for="member_admin" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                  <input type="checkbox" id="member_admin" class="mdl-checkbox__input">
+                  <span class="mdl-checkbox__label">Admin</span>
+                </label>
+            </div>
+            <div class="mdl-dialog__actions">
+                <button type="button" class="mdl-button">Save</button>
+                <button type="button" class="mdl-button close">Cancel</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog id="members-delete-dialog" class="mdl-dialog">
+        <h4 class="mdl-dialog__title">Delete member?</h4>
+        <form action="/delete-member" method="post">
+            <div class="mdl-dialog__content">
+                <input style="display: none;" type="text" name="key" id="members-delete-key">
+                <p>Are you sure you want to delete the member <span class="member-name"></span></p>
+                <p style="display: none;" id="delete-id"></p>
+            </div>
+            <div class="mdl-dialog__actions">
+                <button type="submit" class="mdl-button">Delete</button>
+                <button type="button" class="mdl-button close">Cancel</button>
+            </div>
+        </form>
+    </dialog>
+{% endblock %}

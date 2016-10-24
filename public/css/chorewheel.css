@@ -8,7 +8,7 @@ table.center {
     margin-right: 10%;
 }
 
-table th {
+table > th {
     text-align: center;
 }
 
