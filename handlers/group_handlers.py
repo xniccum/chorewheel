@@ -8,7 +8,7 @@ class GroupPage(base_handlers.BasePage):
         return "templates/groups.html"
 
     def update_values(self, user, values):
-        values["groups"] = User.query(User.email == user.email()).run()
+        values["groups"] = User.query(User.email == user.email())
 
 
 class InsertGroup(base_handlers.BaseAction):

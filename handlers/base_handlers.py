@@ -38,4 +38,3 @@ class BaseAction(webapp2.RequestHandler):
     
     def get(self):
         self.post()
-        raise Exception("Subclass must implement handle_post!")

@@ -10,7 +10,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{% for group in groups %}
+			{% for group in groups.groups %}
 			<tr>
 				<td class="group-id hidden">{{ group.key.urlsafe() }}</td>
 				<td class="group-name"><a href="/chores?groupkey={{ group.key.urlsafe() }}">{{ group.name }}</a></td>

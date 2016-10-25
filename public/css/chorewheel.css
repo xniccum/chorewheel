@@ -35,3 +35,23 @@ table > th {
 .container:after {
 	clear: both;
 }
+
+.mdl-card__supporting-text {
+  width: 94%;
+  padding: 3%;
+}
+
+#google-login-btn {
+  background: #eee url("/public/images/google_signin_btn.png") no-repeat -1px -1px;
+  width: 189px;
+  height: 44px;
+  border-radius: 4px;
+}
+
+.home-card {
+  margin: 30px 5%;
+}
+
+.home-card .mdl-cell {
+  text-align: center;
+}

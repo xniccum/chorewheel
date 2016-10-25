@@ -12,6 +12,9 @@ handlers:
 # Serving static files (css, images, etc.)
 - url: /public
   static_dir: public
+  
+- url: /
+  script: main.app
 
 - url: .*
   script: main.app

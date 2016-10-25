@@ -90,8 +90,14 @@ rh.chorewheel.choresInit = function() {
 	});
 };
 
+rh.chorewheel.membersInit = function() {
+	console.log("TODO");
+}
+
 // Keep at end of file. Call init functions
 $(document).ready(function() {
 	rh.chorewheel.sharedInit();
 	rh.chorewheel.groupsInit();
+	rh.chorewheel.choresInit();
+	rh.chorewheel.membersInit();
 });

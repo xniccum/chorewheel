@@ -50,25 +50,18 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body
-	class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
-	<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-		<header
-			class="mdl-layout__header mdl-color--primary">
-			<div class="mdl-layout__header-row">
-				<span class="mdl-layout-title">Chore Wheel</span>
-				
-				<!-- Add spacer, to align navigation to the right -->
-				<div class="mdl-layout-spacer"></div>
-				<!-- Navigation. We hide it in small screens. -->
-				<nav class="mdl-navigation">
-					<a class="mdl-navigation__link" href="">Groups</a> 
-					<a class="mdl-navigation__link" href="{{ logout_url }}">Log Out</a>
-				</nav>
-			</div>
-		</header>
-		<main class="mdl-layout__content"> {% block content %}{%
-		endblock %} {% block modals %}{% endblock %} </main>
+<body>
+	<div class="home-card mdl-card mdl-shadow--2dp">
+	  <div class="mdl-card__title">
+	    <h2 class="mdl-card__title-text">Welcome</h2>
+	  </div>
+	  <div class="mdl-card__supporting-text">
+	    <div class="mdl-grid">
+	      <a href="{{ login_url }}" class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet">
+	        <button id="google-login-btn" class="mdl-button mdl-js-button mdl-js-ripple-effect"></button>
+	      </a>
+	    </div>
+	  </div>
 	</div>
 </body>
 </html>
