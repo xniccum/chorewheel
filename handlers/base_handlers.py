@@ -25,10 +25,9 @@ class BasePage(webapp2.RequestHandler):
         # Subclasses must override this method to set the Jinja template.
         raise Exception("Subclass must implement handle_post!")
         pass
-    
-    
-    ### Actions ###
-    
+
+
+### Actions ###
 class BaseAction(webapp2.RequestHandler):
     """ALL action handlers should inherit from this one."""
     def post(self):
@@ -39,6 +38,4 @@ class BaseAction(webapp2.RequestHandler):
     
     def get(self):
         self.post()
-    
-    def handle_post(self, user):
         raise Exception("Subclass must implement handle_post!")
