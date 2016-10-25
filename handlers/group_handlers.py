@@ -9,7 +9,10 @@ class GroupPage(base_handlers.BasePage):
 
     def update_values(self, user, values):
         member = User.query(User.email == user.email()).get()
-        values["groups"] = member.groups
+        groups = []
+        for group in member.groups:
+            groups.append(group.get())
+        values["groups"] = groups
 
 
 class InsertGroup(base_handlers.BaseAction):
