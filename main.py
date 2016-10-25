@@ -45,7 +45,7 @@ app = webapp2.WSGIApplication([
     ('/delete-group', group_handlers.DeleteGroup),
 
     # Chores
-    ('/chores/()', group_handlers.GroupPage),
+    ('/chores?groupkey=', group_handlers.GroupPage),
 
     # User
     # ('/add-member', member_handlers.InsertMember),

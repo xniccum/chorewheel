@@ -8,20 +8,24 @@ class GroupPage(base_handlers.BasePage):
         return "templates/groups.html"
 
     def update_values(self, user, values):
-        values["groups"] = User.query(User.email == user.email())
+        member = User.query(User.email == user.email()).get()
+        values["groups"] = member.groups
 
 
 class InsertGroup(base_handlers.BaseAction):
     def handle_post(self, user):
-        if self.request.get("key"):
-            group_key = ndb.Key(urlsafe=self.request.get("key"))
+        member = User.query(User.email == user.email()).get()
+        if self.request.get("group-key"):
+            group_key = ndb.Key(urlsafe=self.request.get("group-key"))
             group = group_key.get()
             group.name = self.request.get("name")
         else:
-            group = Group(name=self.request.get("name"))
+            group = Group(name=self.request.get("name"),
+                          admins=[member.key.urlsafe()],
+                          members=[member.key.urlsafe()])
 
         group.put()
-        self.redirect("/groups")
+        self.redirect(self.request.referer)
 
 
 class DeleteGroup(base_handlers.BaseAction):

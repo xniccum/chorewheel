@@ -1,15 +1,23 @@
 from handlers import base_handlers
+import main
+import webapp2
+from google.appengine.api import users
 from google.appengine.ext import ndb
 from models import Chore, User
 
 
-class GroupPage(base_handlers.BasePage):
-    def get_template(self):
-        return "templates/chores.html"
-
-    def update_values(self, user, values):
-        values["chores"] = Chore.query(User.email == user.email()).run()
-        values["groupkey"] =
+class ChorePage(webapp2.RequestHandler):
+    def get(self):
+        user = users.get_current_user()
+        if not user:
+            raise Exception("Missing user!")
+        values = {"user_email": user.email().lower(),
+                  "logout_url": users.create_logout_url("/"),
+                  "chores": Chore.query(group_id=self.request.get("groupkey")),
+                  "groupkey": self.request.get("groupkey"),
+                  "user_key": user.key.urlsafe()}
+        template = main.jinja_env.get_template("templates/chores.html")
+        self.response.out.write(template.render(values))
 
 
 class InsertChore(base_handlers.BaseAction):
@@ -31,8 +39,8 @@ class InsertChore(base_handlers.BaseAction):
         self.redirect(self.request.referer)
 
 
-class DeleteGroup(base_handlers.BaseAction):
+class DeleteChore(base_handlers.BaseAction):
     def handle_post(self, user):
-        group_key = ndb.Key(urlsafe=self.request.get('chore-key'))
-        group_key.delete()
+        chore_key = ndb.Key(urlsafe=self.request.get('chore-key'))
+        chore_key.delete()
         self.redirect(self.request.referer)
