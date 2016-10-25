@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "templates/base.html" %}
 
 {% block content %}
 <button
@@ -46,11 +46,11 @@
                         <button class="mdl-button mdl-js-button chores-edit-button">
                             <i class="material-icons">mode edit</i>
                         </button>
-                        {% if (chore.assigned_to and chore.assigned_to == {{ user_key }} and not chore.readyForApproval) %}
+                        {% if (chore.assigned_to and chore.assigned_to == user_key and not chore.readyForApproval) %}
                         <button class="mdl-button mdl-js-button mark-for-approval">
                         	<i class="material-icons">done</i>
                         </button>
-                        {% elif (chore.assigned_to and chore.assigned_to != {{ user_key }} and chore.readyForApproval) %}
+                        {% elif (chore.assigned_to and chore.assigned_to != user_key and chore.readyForApproval) %}
                         <button class="mdl-button mdl-js-button mark-approved">
                         	<i class="material-icons">done</i>
                         </button>

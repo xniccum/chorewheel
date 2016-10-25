@@ -11,11 +11,14 @@ class ChorePage(webapp2.RequestHandler):
         user = users.get_current_user()
         if not user:
             raise Exception("Missing user!")
+        member = User.query(User.email == user.email()).get()
+        groupKey = self.request.get('groupkey')
+        group_key = ndb.Key(urlsafe=groupKey)
         values = {"user_email": user.email().lower(),
                   "logout_url": users.create_logout_url("/"),
-                  "chores": Chore.query(group_id=self.request.get("groupkey")),
-                  "groupkey": self.request.get("groupkey"),
-                  "user_key": user.key.urlsafe()}
+                  "chores": Chore.query(Chore.group_id == group_key),
+                  "groupkey": group_key,
+                  "user_key": member}
         template = main.jinja_env.get_template("templates/chores.html")
         self.response.out.write(template.render(values))
 
