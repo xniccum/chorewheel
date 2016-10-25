@@ -4,6 +4,7 @@ import webapp2
 from google.appengine.api import users
 from google.appengine.ext import ndb
 from models import Chore, User
+from utils import date_utils
 
 
 class ChorePage(webapp2.RequestHandler):
@@ -21,6 +22,25 @@ class ChorePage(webapp2.RequestHandler):
                   "user_key": member}
         template = main.jinja_env.get_template("templates/chores.html")
         self.response.out.write(template.render(values))
+        
+class InsertChorePage(base_handlers.BasePage):
+    def get_template(self):
+        return "templates/insertChore.html"
+    
+    def update_values(self, user, values):
+        if self.request.get("chorekey"):
+            chore_key = ndb.Key(urlsafe=self.request.get("chorekey"))
+            chore = chore_key.get()
+            values["name"] = chore.name
+            values["due"] = date_utils.date_time_input_format(chore.due, "US/Eastern")
+            values["frequency"] = chore.frequency
+            values["points"] = chore.points
+            values["groupkey"] = chore.group_id.urlsafe()
+            values["chorekey"] = self.request.get("chorekey")
+        elif self.request.get("groupkey"):
+            values["groupkey"] = self.request.get("groupkey")
+        else:
+            raise Exception("Incorrect URL parameters passes")
 
 
 class InsertChore(base_handlers.BaseAction):
@@ -29,17 +49,19 @@ class InsertChore(base_handlers.BaseAction):
             chore_key = ndb.Key(urlsafe=self.request.get("chore-key"))
             chore = chore_key.get()
             chore.name = self.request.get("name")
-            chore.due = self.request.get("due")
+            chore.due = date_utils.get_utc_datetime_from_user_input("US/Eastern", self.request.get("due"))
             chore.frequency = self.request.get("frequency")
-            chore.points = self.request.get("points")
+            chore.points = int(self.request.get("points"))
         else:
+            group_key = ndb.Key(urlsafe=self.request.get("group-key"))
             chore = Chore(name=self.request.get("name"),
-                          due=self.request.get("due"),
+                          due=date_utils.get_utc_datetime_from_user_input("US/Eastern", self.request.get("due")),
                           frequency= self.request.get("frequency"),
-                          points=self.request.get("points"))
+                          points=int(self.request.get("points")))
+            chore.group_id = group_key.get().key
 
         chore.put()
-        self.redirect(self.request.referer)
+        self.redirect("/chores?groupkey=" + self.request.get("group-key"))
 
 
 class DeleteChore(base_handlers.BaseAction):

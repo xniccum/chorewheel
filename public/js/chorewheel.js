@@ -90,6 +90,18 @@ rh.chorewheel.choresInit = function() {
 	});
 };
 
+rh.chorewheel.choreInsertInit = function() {
+	$("#insert-chore-form").submit(function() {
+		var freq = $("#frequency").attr("data-val");
+		$("#frequency").val(freq);
+	});
+	
+	var freq = $("#frequency").attr("data-val")
+	if (freq) {
+		$("#frequency").val($(".mdl-menu__item[data-val='" + freq + "']").html())
+	}
+};
+
 rh.chorewheel.membersInit = function() {
 	console.log("TODO");
 }
@@ -99,5 +111,6 @@ $(document).ready(function() {
 	rh.chorewheel.sharedInit();
 	rh.chorewheel.groupsInit();
 	rh.chorewheel.choresInit();
+	rh.chorewheel.choreInsertInit();
 	rh.chorewheel.membersInit();
 });

@@ -1,0 +1,43 @@
+{% extends "templates/base.html" %}
+
+{% block content %}
+	<div style="width: 100%; text-align: center;">
+		<h4 class="mdl-dialog__title">{% if chorekey is defined %}Edit Chore{% else %}New Chore{% endif %}</h4>
+	    <form action="/add-chore" method="post" id="insert-chore-form">
+	        <div class="mdl-dialog__content">
+	        	<input style="display: none;" type="text" name="group-key" value="{{ groupkey }}">
+	        	{% if chorekey is defined %}<input style="display: none;" type="text" name="chore-key" value="{{ chorekey }}">{% endif %}
+	            <div
+	                class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+	                <input class="mdl-textfield__input" type="text" name="name" {% if name %}value="{{ name }}"{% endif %}>
+	                <label class="mdl-textfield__label" for="name">Name</label>
+	            </div>
+	        </div>
+	        <div class="scheduled-picker">
+	            <div id="send-date-time-field" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+	                <input class="mdl-textfield__input" type="text" name="due" style="z-index: 1151 !important;"{% if due %}value="{{ due }}"{% endif %}>
+	                <label class="mdl-textfield__label" for="send_date_time">Due date / time</label>
+	            </div>
+	        </div>
+	        <div id="list-select" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fullwidth">
+	            <input class="mdl-textfield__input" type="text" id="frequency" name="frequency" tabIndex="-1" {% if frequency %}data-val="{{ frequency }}"{% endif %}/>
+	            <label class="mdl-textfield__label" for="frequency">Frequency</label>
+	            <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu" for="frequency">
+	            	<li class="mdl-menu__item" data-val="1 day">Every Day</li>
+	                <li class="mdl-menu__item" data-val="1 week">Every Week</li>
+	                <li class="mdl-menu__item" data-val="2 week">Every 2 Weeks</li>
+	                <li class="mdl-menu__item" data-val="1 month">Every Month</li>
+	            </ul>
+	        </div>
+	        <div class="mdl-textfield mdl-js-textfield">
+	            <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="points" name="points" {% if points %}value="{{ points }}"{% endif %}>
+	            <label class="mdl-textfield__label" for="points">Points</label>
+	            <span class="mdl-textfield__error">Input is not a number!</span>
+	        </div>
+	        <div class="mdl-dialog__actions">
+	            <button type="submit" class="mdl-button">{% if chorekey is defined %}Save{% else %}Create{% endif %}</button>
+	            <a href="/chores?groupkey={{ groupkey }}" class="mdl-button close">Cancel</a>
+	        </div>
+	    </form>
+    </div>
+{% endblock %}

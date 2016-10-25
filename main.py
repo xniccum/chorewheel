@@ -46,6 +46,7 @@ app = webapp2.WSGIApplication([
 
     # Chores
     ('/chores', chore_handlers.ChorePage),
+    ('/insert-chore-page', chore_handlers.InsertChorePage),
     ('/add-chore', chore_handlers.InsertChore),
     ('/edit-chore', chore_handlers.InsertChore),
     ('/delete-chore', chore_handlers.DeleteChore),
