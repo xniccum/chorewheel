@@ -10,7 +10,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{% for group in groups.groups %}
+			{% for group in groups %}
 			<tr>
 				<td class="group-id hidden">{{ group.key.urlsafe() }}</td>
 				<td class="group-name"><a href="/chores?groupkey={{ group.key.urlsafe() }}">{{ group.name }}</a></td>
@@ -60,7 +60,7 @@
 	<h4 class="mdl-dialog__title">Edit Group</h4>
 	<form action="/edit-group" method="post">
 		<div class="mdl-dialog__content">
-			<input style="display: none;" type="text" name="key" id="groups-edit-key">
+			<input style="display: none;" type="text" name="group-key" id="group-key">
 			<div
 				id="groups-edit-name"
 				class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
@@ -69,7 +69,7 @@
 			</div>
 		</div>
 		<div class="mdl-dialog__actions">
-			<button type="button" class="mdl-button">Save</button>
+			<button type="submit" class="mdl-button">Save</button>
 			<button type="button" class="mdl-button close">Cancel</button>
 		</div>
 	</form>
@@ -79,7 +79,7 @@
 	<h4 class="mdl-dialog__title">Delete Group?</h4>
 	<form action="/delete-group" method="post">
 		<div class="mdl-dialog__content">
-			<input style="display: none;" type="text" name="key" id="groups-delete-key">
+			<input style="display: none;" type="text" name="group-key" id="groups-delete-key">
 			<p>Are you sure you want to delete the group <span class="group-name"></span></p>
 			<p style="display: none;" id="delete-id"></p>
 		</div>

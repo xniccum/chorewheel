@@ -30,8 +30,8 @@ rh.chorewheel.groupsInit = function() {
 	
 	$(".groups-edit-button").click(function() {
 		var key = $(this).closest("tr").find(".group-id").html();
-		var name = $(this).closest("tr").find(".group-name").html();
-		$("#groups-edit-key").val(key);
+		var name = $(this).closest("tr").find(".group-name").find("a").text();
+		$("#group-key").val(key);
 		
 		document.querySelector("#groups-edit-dialog").showModal();
 		document.querySelector("#groups-edit-name").MaterialTextfield.change(name);
