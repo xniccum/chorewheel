@@ -1,5 +1,3 @@
-import logging
-
 from google.appengine.ext import ndb
 
 from handlers import base_handlers
@@ -10,45 +8,26 @@ class GroupPage(base_handlers.BasePage):
     def get_template(self):
         return "templates/groups.html"
 
-    def update_values(self, user, values):
-        member = User.query(User.email == user.email()).get()
-        groups = []
-        for group in member.groups:
-            groups.append(group.get())
-        values["groups"] = groups
+    def update_values(self, google_user, values):
+        values["groups"] = User.get_groups(google_user)
 
 
 class InsertGroup(base_handlers.BaseAction):
-    def handle_post(self, user):
-        member = User.query(User.email == user.email()).get()
+    def handle_post(self, google_user):
         if self.request.get("group-key"):
             group_key = ndb.Key(urlsafe=self.request.get("group-key"))
             group = group_key.get()
             group.name = self.request.get("name")
             group.put()
         else:
-            datastoreUser = User.query(User.email == user.email()).get()
-            group = Group(name=self.request.get("name"),
-                          admins=[member.key],
-                          members=[member.key])
-            group.put()
-            datastoreUser.groups.append(group.key)
-            datastoreUser.put()
-
+            user = User.get_by_user(google_user)
+            Group.insert_group(user=user,
+                               name=self.request.get("name"))
         self.redirect(self.request.referer)
 
 
 class DeleteGroup(base_handlers.BaseAction):
     def handle_post(self, user):
-        groupKey = self.request.get('group-key')
-        group_key = ndb.Key(urlsafe=groupKey)
-        usersQuery = User.query()
-        for u in usersQuery:
-            i = 0
-            for g in u.groups:
-                if str(group_key) == str(u.groups[i]):
-                    del u.groups[i]
-                    u.put()
-                i += 1
-        group_key.delete()
+        group_key = ndb.Key(urlsafe=self.request.get('group-key'))
+        Group.delete_group(group_key)
         self.redirect(self.request.referer)

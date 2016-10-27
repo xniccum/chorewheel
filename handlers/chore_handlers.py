@@ -9,17 +9,16 @@ from utils import date_utils
 
 class ChorePage(webapp2.RequestHandler):
     def get(self):
-        user = users.get_current_user()
-        if not user:
+        google_user = users.get_current_user()
+        if not google_user:
             raise Exception("Missing user!")
-        member = User.query(User.email == user.email()).get()
-        groupKey = self.request.get('groupkey')
-        group_key = ndb.Key(urlsafe=groupKey)
-        values = {"user_email": user.email().lower(),
+
+        group_key = ndb.Key(urlsafe=self.request.get('groupkey'))
+        values = {"user_email": google_user.email().lower(),
                   "logout_url": users.create_logout_url("/"),
-                  "chores": Chore.query(Chore.group_id == group_key),
+                  "chores": Chore.get_by_group(group_key),
                   "groupkey": group_key,
-                  "user_key": member}
+                  "user_key": User.get_by_user(google_user)}
         template = main.jinja_env.get_template("templates/chores.html")
         self.response.out.write(template.render(values))
         
@@ -44,7 +43,7 @@ class InsertChorePage(base_handlers.BasePage):
 
 
 class InsertChore(base_handlers.BaseAction):
-    def handle_post(self, user):
+    def handle_post(self, google_user):
         if self.request.get("chore-key"):
             chore_key = ndb.Key(urlsafe=self.request.get("chore-key"))
             chore = chore_key.get()
@@ -54,7 +53,8 @@ class InsertChore(base_handlers.BaseAction):
             chore.points = int(self.request.get("points"))
         else:
             group_key = ndb.Key(urlsafe=self.request.get("group-key"))
-            chore = Chore(name=self.request.get("name"),
+            chore = Chore(parent=Chore.PARENT_KEY,
+                          name=self.request.get("name"),
                           due=date_utils.get_utc_datetime_from_user_input("US/Eastern", self.request.get("due")),
                           frequency= self.request.get("frequency"),
                           points=int(self.request.get("points")))

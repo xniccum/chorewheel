@@ -19,7 +19,7 @@ import os
 import jinja2
 import webapp2
 
-from handlers import main_handler, group_handlers, login_handler, chore_handlers
+from handlers import main_handler, group_handlers, login_handler, chore_handlers, user_handlers
 
 
 # Jinja environment instance necessary to use Jinja templates.
@@ -53,8 +53,8 @@ app = webapp2.WSGIApplication([
 
 
     # Members
-    ('/members', chore_handlers.ChorePage),
-    ('/add-member', chore_handlers.InsertChore),
-    ('/edit-member', chore_handlers.InsertChore),
-    ('/delete-member', chore_handlers.DeleteChore)
+    ('/members', user_handlers.MemberPage),
+    ('/add-member', user_handlers.InsertMember),
+    ('/edit-member', user_handlers.InsertMember),
+    ('/delete-member', user_handlers.DeleteMember)
 ], debug=True)
