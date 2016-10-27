@@ -1,7 +1,33 @@
-{% extends "base.html" %}
+{% extends "templates/base.html" %}
 
 {% block content %}
-    <table class="mdl-data-table mdl-js-data-table">
+    <br>
+    <br>
+    <div style="margin-left: auto; margin-right: auto; width: 25%;">
+        <a
+            href="/insert-chore-page?groupkey={{ groupkey.urlsafe() }}"
+            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary">
+            <i class="material-icons">add</i>
+            Add Chore
+        </a>
+
+        <button
+            id="chores-add-member"
+            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            <i class="material-icons">add</i>
+            Add Member
+        </button>
+    </div>
+
+    <div style="left: 37.5%;" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fullwidth">
+        <input class="mdl-textfield__input" type="text" id="current-view" name="current-view" tabIndex="-1" placeholder="Chores" data-val="chores"/>
+        <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu" for="current-view">
+            <a href="/chores?groupkey={{ groupkey.urlsafe() }}"><li class="mdl-menu__item" data-val="chores">Chores</li></a>
+            <a href="/members?groupkey={{ groupkey.urlsafe() }}"><li class="mdl-menu__item" data-val="members">Members</li></a>
+        </ul>
+    </div>
+
+    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp center">
         <thead>
             <tr>
                 <th>Name</th>
@@ -15,7 +41,7 @@
                 <tr>
                     <td>{{ member.name }}</td>
                     <td>{{ member.email }}</td>
-                    <td>{{ memeber.points }}</td>
+                    <td>{{ member.points }}</td>
                     <td>
                         <button class="mdl-button mdl-js-button">
                             <i class="material-icons">edit</i>

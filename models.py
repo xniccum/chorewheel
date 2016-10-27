@@ -33,7 +33,10 @@ class Group(ndb.Model):
     @classmethod
     @db.transactional
     def get_members_from_key(cls, key):
-        return key.get().members
+        members = []
+        for member in key.get().members:
+            members.append(member.get())
+        return members
 
     @classmethod
     @db.transactional
