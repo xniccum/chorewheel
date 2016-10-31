@@ -48,7 +48,21 @@
                 	<td class="chore-key hidden">{{ chore.key.urlsafe() }}</td>
                 	<td class="chore-frequency hidden">{{ chore.frequency }}</td>
                     <td class="chore-name">{{ chore.name }}</td>
-                    <td>{{ chore.assigned_to_name }}</td>
+                    {% if chore.assigned_to is not none %}
+                    <td>{{ chore.assigned_to }}</td>
+			        {% else %}
+                    <td>
+	                    <div id="list-select" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fullwidth">
+				            <input class="mdl-textfield__input" type="text" id="assigned-to" name="assigned-to" tabIndex="-1" />
+				            <label class="mdl-textfield__label" for="assigned-to">Assigned To</label>
+				            <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu" for="assigned-to">
+				            	{% for member in members %}
+				            		<li class="mdl-menu__item" data-val="{{ member.key.urlsafe() }}">{{ member.email }}</li>
+				            	{% endfor %}
+				            </ul>
+				        </div>
+			        </td>
+                    {% endif %}
                     <td class="chore-points">{{ chore.points }}</td>
                     <td class="chore-due">{{ chore.due }}</td>
                     <td>

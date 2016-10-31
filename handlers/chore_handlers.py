@@ -43,7 +43,7 @@ class InsertChore(base_handlers.BaseAction):
             chore.group_id = group_key.get().key
 
         chore.put()
-        self.redirect("/chores?groupkey=" + self.request.get("group-key"))
+        self.redirect("/groups?group-key=" + self.request.get("group-key"))
 
 
 class DeleteChore(base_handlers.BaseAction):
@@ -51,3 +51,11 @@ class DeleteChore(base_handlers.BaseAction):
         chore_key = ndb.Key(urlsafe=self.request.get('chore-key'))
         chore_key.delete()
         self.redirect(self.request.referer)
+        
+class AssignChore(base_handlers.BaseAction):
+    def handle_post(self, user):
+        assign_to = ndb.Key(urlsafe=self.request.get('assignto'))
+        chore_key = ndb.Key(urlsafe=self.request.get('chorekey'))
+        chore = chore_key.get()
+        chore.assigned_to = assign_to
+        chore.put()

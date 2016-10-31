@@ -43,7 +43,21 @@
                 	<td class="chore-key hidden">{{ chore.key.urlsafe() }}</td>
                 	<td class="chore-frequency hidden">{{ chore.frequency }}</td>
                     <td class="chore-name">{{ chore.name }}</td>
+                    {% if not chore.assigned_to is defined %}
                     <td>{{ chore.assigned_to_name }}</td>
+			        {% else %}
+                    <td>
+	                    <div id="list-select" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fullwidth">
+				            <input class="mdl-textfield__input" type="text" id="frequency" name="frequency" tabIndex="-1" {% if frequency %}data-val="{{ frequency }}"{% endif %}/>
+				            <label class="mdl-textfield__label" for="frequency">Frequency</label>
+				            <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu" for="frequency">
+				            	{% for member in members %}
+				            		<li class="mdl-menu__item" data-val="{{ member.key.urlsafe() }}">{{ member.email }}</li>
+				            	{% endfor %}
+				            </ul>
+				        </div>
+			        </td>
+                    {% endif %}
                     <td class="chore-points">{{ chore.points }}</td>
                     <td class="chore-due">{{ chore.due }}</td>
                     <td>

@@ -88,6 +88,22 @@ rh.chorewheel.choresInit = function() {
 		
 		document.querySelector("#chores-delete-dialog").showModal();
 	});
+	
+	$("#assigned-to").on("change", function() {
+		var choreKey = $(this).closest("tr").find(".chore-key").html();
+		var assignTo = $(this).attr("data-val");
+		$.ajax({
+			url: "/assign-chore",
+			method: "POST",
+			data: {
+				chorekey: choreKey,
+				assignto: assignTo
+			},
+			success: function() {
+				window.location.reload();
+			}
+		});
+	});
 };
 
 rh.chorewheel.choreInsertInit = function() {
