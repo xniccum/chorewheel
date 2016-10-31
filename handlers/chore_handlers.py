@@ -43,7 +43,7 @@ class InsertChore(base_handlers.BaseAction):
             chore.group_id = group_key.get().key
 
         chore.put()
-        self.redirect("/chores?groupkey=" + self.request.get("group-key"))
+        self.redirect("/groups?group-key=" + self.request.get("group-key"))
 
 
 class DeleteChore(base_handlers.BaseAction):

@@ -3,6 +3,7 @@ from google.appengine.ext import db
 
 
 class User(ndb.Model):
+    name = ndb.StringProperty()
     email = ndb.StringProperty()
     groups = ndb.KeyProperty(kind='Group', repeated=True)
 

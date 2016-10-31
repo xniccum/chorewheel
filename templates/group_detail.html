@@ -19,13 +19,6 @@
         </button>
     </div>
 
-{#    <div style="left: 37.5%;" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fullwidth">#}
-{#        <input class="mdl-textfield__input" type="text" id="current-view" name="current-view" tabIndex="-1" placeholder="Chores" data-val="chores"/>#}
-{#        <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu" for="current-view">#}
-{#            <a href="/chores?groupkey={{ groupkey.urlsafe() }}"><li class="mdl-menu__item" data-val="chores">Chores</li></a>#}
-{#            <a href="/members?groupkey={{ groupkey.urlsafe() }}"><li class="mdl-menu__item" data-val="members">Members</li></a>#}
-{#        </ul>#}
-{#    </div>#}
     <div class="mdl-tabs mdl-js-tabs">
         <div class="mdl-tabs__tab-bar">
            <a href="#Chores" class="mdl-tabs__tab is-active">Tab 1</a>
@@ -33,74 +26,74 @@
         </div>
         <div class="mdl-tabs__panel is-active" id="Chores">
            <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp center">
-        <thead>
-            <tr>
-                <th>Chore</th>
-                <th>Assigned To</th>
-                <th>Points</th>
-                <th>Due</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for chore in chores %}
-                <tr>
-                	<td class="chore-key hidden">{{ chore.key.urlsafe() }}</td>
-                	<td class="chore-frequency hidden">{{ chore.frequency }}</td>
-                    <td class="chore-name">{{ chore.name }}</td>
-                    <td>{{ chore.assigned_to_name }}</td>
-                    <td class="chore-points">{{ chore.points }}</td>
-                    <td class="chore-due">{{ chore.due }}</td>
-                    <td>
-                        <a href="/insert-chore-page?chorekey={{ chore.key.urlsafe() }}" class="mdl-button mdl-js-button">
-                            <i class="material-icons">mode edit</i>
-                        </a>
-                        {% if (chore.assigned_to and chore.assigned_to == user_key and not chore.readyForApproval) %}
-                        <button class="mdl-button mdl-js-button mark-for-approval">
-                        	<i class="material-icons">done</i>
-                        </button>
-                        {% elif (chore.assigned_to and chore.assigned_to != user_key and chore.readyForApproval) %}
-                        <button class="mdl-button mdl-js-button mark-approved">
-                        	<i class="material-icons">done</i>
-                        </button>
-                        {% endif %}
-                        <button class="mdl-button mdl-js-button chores-delete-button">
-                            <i class="material-icons">delete</i>
-                        </button>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                <thead>
+                    <tr>
+                        <th>Chore</th>
+                        <th>Assigned To</th>
+                        <th>Points</th>
+                        <th>Due</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for chore in chores %}
+                        <tr>
+                            <td class="chore-key hidden">{{ chore.key.urlsafe() }}</td>
+                            <td class="chore-frequency hidden">{{ chore.frequency }}</td>
+                            <td class="chore-name">{{ chore.name }}</td>
+                            <td>{{ chore.assigned_to_name }}</td>
+                            <td class="chore-points">{{ chore.points }}</td>
+                            <td class="chore-due">{{ chore.due }}</td>
+                            <td>
+                                <a href="/insert-chore-page?chorekey={{ chore.key.urlsafe() }}" class="mdl-button mdl-js-button">
+                                    <i class="material-icons">mode edit</i>
+                                </a>
+                                {% if (chore.assigned_to and chore.assigned_to == user_key and not chore.readyForApproval) %}
+                                <button class="mdl-button mdl-js-button mark-for-approval">
+                                    <i class="material-icons">done</i>
+                                </button>
+                                {% elif (chore.assigned_to and chore.assigned_to != user_key and chore.readyForApproval) %}
+                                <button class="mdl-button mdl-js-button mark-approved">
+                                    <i class="material-icons">done</i>
+                                </button>
+                                {% endif %}
+                                <button class="mdl-button mdl-js-button chores-delete-button">
+                                    <i class="material-icons">delete</i>
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
         <div class="mdl-tabs__panel" id="Members">
            <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp center">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Points</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for member in members %}
-                <tr>
-                    <td>{{ member.name }}</td>
-                    <td>{{ member.email }}</td>
-                    <td>{{ member.points }}</td>
-                    <td>
-                        <button class="mdl-button mdl-js-button">
-                            <i class="material-icons">edit</i>
-                        </button>
-                        <button class="mdl-button mdl-js-button">
-                            <i class="material-icons">delete</i>
-                        </button>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Points</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for member in members %}
+                        <tr>
+                            <td>{{ member.name }}</td>
+                            <td>{{ member.email }}</td>
+                            <td>{{ points[member.email] }}</td>
+                            <td>
+                                <button class="mdl-button mdl-js-button">
+                                    <i class="material-icons">edit</i>
+                                </button>
+                                <button class="mdl-button mdl-js-button">
+                                    <i class="material-icons">delete</i>
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 {% endblock %}

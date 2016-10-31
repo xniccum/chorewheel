@@ -5,7 +5,7 @@ from models import User
 
 class InsertMember(base_handlers.BaseAction):
     def handle_post(self, google_user):
-        group_key = ndb.Key(urlsafe=self.request.get("groupkey"))
+        group_key = ndb.Key(urlsafe=self.request.get("group-key"))
         group = group_key.get()
         if self.request.get("member-key"):
             pass
@@ -29,7 +29,7 @@ class DeleteMember(base_handlers.BaseAction):
     def handle_post(self, user):
         # Delete member from group
         member_key = ndb.Key(urlsafe=self.request.get('member-key'))
-        group_key = self.request.get("groupkey")
+        group_key = self.request.get("group-key")
         group = group_key.get()
         group.members.remove(member_key)
         group.admins.remove(member_key)

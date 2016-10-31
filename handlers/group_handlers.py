@@ -23,12 +23,12 @@ class GroupPage(base_handlers.BasePage):
             for member_key in group_key.get().members:
                 member = member_key.get()
                 members.append(member)
-                # chores = Chore.query(ancestor=Chore.PARENT_KEY).filter(Chore.assigned_to == member_key)
-                # if chores.count() != 0:
-                #     sum = 0
-                #     for chore in chores:
-                #         sum += chore.points
-                # points[member] = points
+                chores = Chore.query(ancestor=Chore.PARENT_KEY).filter(Chore.assigned_to == member_key)
+                sum = 0
+                if chores.count() != 0:
+                    for chore in chores:
+                        sum += chore.points
+                points[member.email] = sum
 
             values["members"] = members
             values["points"] = points
