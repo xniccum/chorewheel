@@ -40,20 +40,20 @@ app = webapp2.WSGIApplication([
 
     # Group
     ('/groups', group_handlers.GroupPage),
+
+    # Group-CRUD
     ('/add-group', group_handlers.InsertGroup),
     ('/edit-group', group_handlers.InsertGroup),
     ('/delete-group', group_handlers.DeleteGroup),
 
-    # Chores
-    ('/chores', chore_handlers.ChorePage),
+    # Chores-CRUD
     ('/insert-chore-page', chore_handlers.InsertChorePage),
     ('/add-chore', chore_handlers.InsertChore),
     ('/edit-chore', chore_handlers.InsertChore),
     ('/delete-chore', chore_handlers.DeleteChore),
 
 
-    # Members
-    ('/members', user_handlers.MemberPage),
+    # Members-CRUD
     ('/add-member', user_handlers.InsertMember),
     ('/edit-member', user_handlers.InsertMember),
     ('/delete-member', user_handlers.DeleteMember)

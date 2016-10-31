@@ -1,15 +1,39 @@
 from google.appengine.ext import ndb
 
 from handlers import base_handlers
-from models import Group, User
+from models import Group, User, Chore
 
 
 class GroupPage(base_handlers.BasePage):
     def get_template(self):
-        return "templates/groups.html"
+        if self.request.get("group-key"):
+            return "templates/group_detail.html"
+        else:
+            return "templates/groups.html"
 
     def update_values(self, google_user, values):
-        values["groups"] = User.get_groups(google_user)
+        if self.request.get("group-key"):
+            group_key = ndb.Key(urlsafe=self.request.get('group-key'))
+            values["groupkey"] = group_key
+            values["chores"] = Chore.get_by_group(group_key)
+            values["user_key"] = User.get_by_user(google_user)
+
+            members = []
+            points = {}
+            for member_key in group_key.get().members:
+                member = member_key.get()
+                members.append(member)
+                # chores = Chore.query(ancestor=Chore.PARENT_KEY).filter(Chore.assigned_to == member_key)
+                # if chores.count() != 0:
+                #     sum = 0
+                #     for chore in chores:
+                #         sum += chore.points
+                # points[member] = points
+
+            values["members"] = members
+            values["points"] = points
+        else:
+            values["groups"] = User.get_groups(google_user)
 
 
 class InsertGroup(base_handlers.BaseAction):

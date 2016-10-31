@@ -1,0 +1,283 @@
+{% extends "templates/base.html" %}
+
+{% block content %}
+    <br>
+    <br>
+    <div style="margin-left: auto; margin-right: auto; width: 25%;">
+        <a
+            href="/insert-chore-page?groupkey={{ groupkey.urlsafe() }}"
+            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary">
+            <i class="material-icons">add</i>
+            Add Chore
+        </a>
+
+        <button
+            id="chores-add-member"
+            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            <i class="material-icons">add</i>
+            Add Member
+        </button>
+    </div>
+
+{#    <div style="left: 37.5%;" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fullwidth">#}
+{#        <input class="mdl-textfield__input" type="text" id="current-view" name="current-view" tabIndex="-1" placeholder="Chores" data-val="chores"/>#}
+{#        <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu" for="current-view">#}
+{#            <a href="/chores?groupkey={{ groupkey.urlsafe() }}"><li class="mdl-menu__item" data-val="chores">Chores</li></a>#}
+{#            <a href="/members?groupkey={{ groupkey.urlsafe() }}"><li class="mdl-menu__item" data-val="members">Members</li></a>#}
+{#        </ul>#}
+{#    </div>#}
+    <div class="mdl-tabs mdl-js-tabs">
+        <div class="mdl-tabs__tab-bar">
+           <a href="#Chores" class="mdl-tabs__tab is-active">Tab 1</a>
+           <a href="#Members" class="mdl-tabs__tab">Tab 2</a>
+        </div>
+        <div class="mdl-tabs__panel is-active" id="Chores">
+           <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp center">
+        <thead>
+            <tr>
+                <th>Chore</th>
+                <th>Assigned To</th>
+                <th>Points</th>
+                <th>Due</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for chore in chores %}
+                <tr>
+                	<td class="chore-key hidden">{{ chore.key.urlsafe() }}</td>
+                	<td class="chore-frequency hidden">{{ chore.frequency }}</td>
+                    <td class="chore-name">{{ chore.name }}</td>
+                    <td>{{ chore.assigned_to_name }}</td>
+                    <td class="chore-points">{{ chore.points }}</td>
+                    <td class="chore-due">{{ chore.due }}</td>
+                    <td>
+                        <a href="/insert-chore-page?chorekey={{ chore.key.urlsafe() }}" class="mdl-button mdl-js-button">
+                            <i class="material-icons">mode edit</i>
+                        </a>
+                        {% if (chore.assigned_to and chore.assigned_to == user_key and not chore.readyForApproval) %}
+                        <button class="mdl-button mdl-js-button mark-for-approval">
+                        	<i class="material-icons">done</i>
+                        </button>
+                        {% elif (chore.assigned_to and chore.assigned_to != user_key and chore.readyForApproval) %}
+                        <button class="mdl-button mdl-js-button mark-approved">
+                        	<i class="material-icons">done</i>
+                        </button>
+                        {% endif %}
+                        <button class="mdl-button mdl-js-button chores-delete-button">
+                            <i class="material-icons">delete</i>
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+        </div>
+        <div class="mdl-tabs__panel" id="Members">
+           <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp center">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Points</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for member in members %}
+                <tr>
+                    <td>{{ member.name }}</td>
+                    <td>{{ member.email }}</td>
+                    <td>{{ member.points }}</td>
+                    <td>
+                        <button class="mdl-button mdl-js-button">
+                            <i class="material-icons">edit</i>
+                        </button>
+                        <button class="mdl-button mdl-js-button">
+                            <i class="material-icons">delete</i>
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block modals %}
+    <dialog id="members-add-dialog" class="mdl-dialog">
+        <h4 class="mdl-dialog__title">New Member</h4>
+        <form action="/add-member" method="post">
+            <div class="mdl-dialog__content">
+                <div
+                    class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="text" name="email">
+                    <label class="mdl-textfield__label" for="email">Email</label>
+                </div>
+                <label for="member_admin" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                  <input type="checkbox" id="member_admin" class="mdl-checkbox__input" name="is_admin">
+                  <span class="mdl-checkbox__label">Admin</span>
+                </label>
+            </div>
+            <div class="mdl-dialog__actions">
+                <button type="submit" class="mdl-button">Invite</button>
+                <button type="button" class="mdl-button close">Cancel</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog id="members-edit-dialog" class="mdl-dialog">
+        <h4 class="mdl-dialog__title">Edit Member</h4>
+        <form action="/edit-member" method="post">
+            <div class="mdl-dialog__content">
+                <input style="display: none;" type="text" name="key" id="members-edit-key">
+                <label id="member-edit-admin" for="member_admin" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                  <input type="checkbox" class="mdl-checkbox__input" name="is_admin">
+                  <span class="mdl-checkbox__label">Admin</span>
+                </label>
+            </div>
+            <div class="mdl-dialog__actions">
+                <button type="button" class="mdl-button">Save</button>
+                <button type="button" class="mdl-button close">Cancel</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog id="members-delete-dialog" class="mdl-dialog">
+        <h4 class="mdl-dialog__title">Delete member?</h4>
+        <form action="/delete-member" method="post">
+            <div class="mdl-dialog__content">
+                <input style="display: none;" type="text" name="key" id="members-delete-key">
+                <p>Are you sure you want to delete the member <span class="member-name"></span></p>
+                <p style="display: none;" id="delete-id"></p>
+            </div>
+            <div class="mdl-dialog__actions">
+                <button type="submit" class="mdl-button">Delete</button>
+                <button type="button" class="mdl-button close">Cancel</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog id="chores-add-dialog" class="mdl-dialog">
+        <h4 class="mdl-dialog__title">New Chore</h4>
+        <form action="/add-chore" method="post">
+            <div class="mdl-dialog__content">
+            	<input style="display: none;" type="text" name="group_id" value="{{ groupkey }}">
+                <div
+                    class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="text" name="name">
+                    <label class="mdl-textfield__label" for="name">Name</label>
+                </div>
+            </div>
+            <div class="scheduled-picker">
+                <div id="send-date-time-field" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="text" name="due" style="z-index: 1151 !important;">
+                    <label class="mdl-textfield__label" for="send_date_time">Due date / time</label>
+                </div>
+            </div>
+            <div id="list-select" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fullwidth">
+                <input class="mdl-textfield__input" type="text" id="frequency" name="frequency" tabIndex="-1"/>
+                <label class="mdl-textfield__label" for="frequency">Frequency</label>
+                <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu" for="frequency">
+                	<li class="mdl-menu__item" data-val="1 day">Every Day</li>
+                    <li class="mdl-menu__item" data-val="1 week">Every Week</li>
+                    <li class="mdl-menu__item" data-val="2 week">Every 2 Weeks</li>
+                    <li class="mdl-menu__item" data-val="1 month">Every Month</li>
+                </ul>
+            </div>
+            <div class="mdl-textfield mdl-js-textfield">
+                <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="points" name="points">
+                <label class="mdl-textfield__label" for="points">Points</label>
+                <span class="mdl-textfield__error">Input is not a number!</span>
+            </div>
+            <div class="mdl-dialog__actions">
+                <button type="submit" class="mdl-button">Create</button>
+                <button type="button" class="mdl-button close">Cancel</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog id="chores-add-member-dialog" class="mdl-dialog">
+        <h4 class="mdl-dialog__title"><i class="material-icons">add</i>Invite Member</h4>
+        <div class="mdl-dialog__content">
+            <form action="/add-member" method="post">
+                <div class="mdl-dialog__content">
+	                <div
+	                    class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+	                    <input class="mdl-textfield__input" type="text" name="email">
+	                    <label class="mdl-textfield__label" for="email">Email</label>
+	                </div>
+           		</div>
+           		<div class="mdl-dialog__content">
+	           		<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="is_admin">
+						<span class="mdl-checkbox__label">Admin?</span>
+						<input type="checkbox" id="is_admin" class="mdl-checkbox__input">
+					</label>
+				</div>
+				<div class="mdl-dialog__actions">
+	                <button type="submit" class="mdl-button">Invite</button>
+	                <button type="button" class="mdl-button close">Cancel</button>
+	            </div>
+            </form>
+        </div>
+    </dialog>
+
+    <dialog id="chores-edit-dialog" class="mdl-dialog">
+        <h4 class="mdl-dialog__title">Edit Chore</h4>
+        <div class="mdl-dialog__content">
+            <form method="post">
+                <div class="mdl-dialog__content">
+	            	<input style="display: none;" type="text" name="group_id" value="{{ groupkey }}">
+	            	<input style="display: none;" type="text" name="chore_id" id="chores-edit-key">
+	                <div
+	                	id="chores-edit-name"
+	                    class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+	                    <input class="mdl-textfield__input" type="text" name="name">
+	                    <label class="mdl-textfield__label" for="name">Name</label>
+	                </div>
+	            </div>
+	            <div class="scheduled-picker">
+	                <div id="edit-date-time-field" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+	                    <input class="mdl-textfield__input" type="text" name="due">
+	                    <label class="mdl-textfield__label" for="send_date_time">Due date / time</label>
+	                </div>
+	            </div>
+	            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fullwidth">
+	                <input class="mdl-textfield__input" type="text" id="frequency" name="frequency" tabIndex="-1"/>
+	                <label class="mdl-textfield__label" for="frequency">Frequency</label>
+	                <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu" for="frequency">
+	                	<li class="mdl-menu__item" data-val="1 day">Every Day</li>
+	                    <li class="mdl-menu__item" data-val="1 week">Every Week</li>
+	                    <li class="mdl-menu__item" data-val="2 week">Every 2 Weeks</li>
+	                    <li class="mdl-menu__item" data-val="1 month">Every Month</li>
+	                </ul>
+	            </div>
+	            <div id="chores-edit-points" class="mdl-textfield mdl-js-textfield">
+	                <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="points" name="points">
+	                <label class="mdl-textfield__label" for="points">Points</label>
+	                <span class="mdl-textfield__error">Input is not a number!</span>
+	            </div>
+	            <div class="mdl-dialog__actions">
+	                <button type="submit" class="mdl-button">Create</button>
+	                <button type="button" class="mdl-button close">Cancel</button>
+	            </div>
+            </form>
+        </div>
+    </dialog>
+
+    <dialog id="chores-delete-dialog" class="mdl-dialog">
+        <h4 class="mdl-dialog__title">Delete Chore?</h4>
+        <form action="/delete-chore" method="post">
+            <div class="mdl-dialog__content">
+                <input style="display: none;" type="text" name="chore-key" id="chores-delete-key">
+                <p>Are you sure you want to delete this Chore?</p>
+                <p style="display: none;" id="delete-id"></p>
+            </div>
+            <div class="mdl-dialog__actions">
+                <button type="submit" class="mdl-button">Delete</button>
+                <button type="button" class="mdl-button close">Cancel</button>
+            </div>
+        </form>
+    </dialog>
+{% endblock %}
