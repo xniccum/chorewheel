@@ -1,26 +1,8 @@
 from handlers import base_handlers
-import main
-import webapp2
-from google.appengine.api import users
 from google.appengine.ext import ndb
-from models import Chore, User
+from models import Chore
 from utils import date_utils
 
-
-class ChorePage(webapp2.RequestHandler):
-    def get(self):
-        google_user = users.get_current_user()
-        if not google_user:
-            raise Exception("Missing user!")
-
-        group_key = ndb.Key(urlsafe=self.request.get('groupkey'))
-        values = {"user_email": google_user.email().lower(),
-                  "logout_url": users.create_logout_url("/"),
-                  "chores": Chore.get_by_group(group_key),
-                  "groupkey": group_key,
-                  "user_key": User.get_by_user(google_user)}
-        template = main.jinja_env.get_template("templates/chores.html")
-        self.response.out.write(template.render(values))
         
 class InsertChorePage(base_handlers.BasePage):
     def get_template(self):

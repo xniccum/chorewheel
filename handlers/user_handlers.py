@@ -1,35 +1,6 @@
 from handlers import base_handlers
-import main
-import webapp2
-from google.appengine.api import users
 from google.appengine.ext import ndb
-from models import Group, User, Chore
-
-
-class MemberPage(webapp2.RequestHandler):
-    def get(self):
-        google_user = users.get_current_user()
-        if not google_user:
-            raise Exception("Missing user!")
-        group_key = ndb.Key(urlsafe=self.request.get("groupkey"))
-        members = []
-        points = {}
-        for member_key in group_key.get().members:
-            member = member_key.get()
-            members.append(member)
-            # chores = Chore.query(ancestor=Chore.PARENT_KEY).filter(Chore.assigned_to == member_key)
-            # if chores.count() != 0:
-            #     sum = 0
-            #     for chore in chores:
-            #         sum += chore.points
-            # points[member] = points
-        values = {"user_email": google_user.email().lower(),
-                  "logout_url": users.create_logout_url("/"),
-                  "members": members,
-                  #"points": points,
-                  "groupkey": group_key}
-        template = main.jinja_env.get_template("templates/members.html")
-        self.response.out.write(template.render(values))
+from models import User
 
 
 class InsertMember(base_handlers.BaseAction):
@@ -56,7 +27,7 @@ class InsertMember(base_handlers.BaseAction):
 
 class DeleteMember(base_handlers.BaseAction):
     def handle_post(self, user):
-        #Delete member from group
+        # Delete member from group
         member_key = ndb.Key(urlsafe=self.request.get('member-key'))
         group_key = self.request.get("groupkey")
         group = group_key.get()
