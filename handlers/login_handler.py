@@ -7,6 +7,7 @@ class HandleLogin(base_handlers.BaseAction):
         user = User.query(ancestor=User.PARENT_KEY).filter(User.email == google_user.email())
         if user.count() == 0:
             newUser = User(parent=User.PARENT_KEY,
+                           name=google_user.nickname(),
                            email=google_user.email(),
                            groups=[])
             newUser.put()
