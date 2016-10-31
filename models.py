@@ -9,12 +9,10 @@ class User(ndb.Model):
     PARENT_KEY = ndb.Key("User", "root")
 
     @classmethod
-    @db.transactional
     def get_by_user(cls, user):
         return cls.query(ancestor=User.PARENT_KEY).filter(cls.email == user.email()).get()
 
     @classmethod
-    @db.transactional
     def get_groups(cls, google_user):
         member = cls.query(ancestor=cls.PARENT_KEY).filter(cls.email == google_user.email()).get()
         groups = []
@@ -31,7 +29,6 @@ class Group(ndb.Model):
     PARENT_KEY = ndb.Key("Group", "root")
 
     @classmethod
-    @db.transactional
     def get_members_from_key(cls, key):
         members = []
         for member in key.get().members:
@@ -39,7 +36,6 @@ class Group(ndb.Model):
         return members
 
     @classmethod
-    @db.transactional
     def insert_group(cls, user, name):
         group = Group(parent=cls.PARENT_KEY,
                       name=name,
@@ -50,7 +46,6 @@ class Group(ndb.Model):
         user.put()
 
     @classmethod
-    @db.transactional
     def delete_group(cls, key):
         users_query = User.query(ansestor=User.PARENT_KEY)
         for u in users_query:
@@ -78,7 +73,6 @@ class Chore(ndb.Model):
     PARENT_KEY = ndb.Key("Chore", "root")
 
     @classmethod
-    @db.transactional
     def get_by_group(cls, group_id):
         return cls.query(ancestor=cls.PARENT_KEY).filter(cls.group_id == group_id)
 
