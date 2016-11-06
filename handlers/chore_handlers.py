@@ -64,6 +64,14 @@ class AssignChore(base_handlers.BaseAction):
         chore.readyForApproval = False
         chore.put()
 
+class UnassignChore(base_handlers.BaseAction):
+    def handle_post(self, user):
+        chore_key = ndb.Key(urlsafe=self.request.get('chorekey'))
+        chore = chore_key.get()
+        chore.assigned_to = None
+        chore.readyForApproval = False
+        chore.put()
+
 class MarkChore(base_handlers.BaseAction):
     def handle_post(self, user):
         chore_key = ndb.Key(urlsafe=self.request.get("chorekey"))
