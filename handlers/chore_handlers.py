@@ -49,7 +49,7 @@ class InsertChore(base_handlers.BaseAction):
 
 
 class DeleteChore(base_handlers.BaseAction):
-    def handle_post(self, user):
+    def handle_post(self, google_user):
         chore_key = ndb.Key(urlsafe=self.request.get('chore-key'))
         chore_key.delete()
         self.redirect(self.request.referer)
@@ -64,6 +64,7 @@ class AssignChore(base_handlers.BaseAction):
         chore.readyForApproval = False
         chore.put()
 
+
 class UnassignChore(base_handlers.BaseAction):
     def handle_post(self, user):
         chore_key = ndb.Key(urlsafe=self.request.get('chorekey'))
@@ -71,6 +72,7 @@ class UnassignChore(base_handlers.BaseAction):
         chore.assigned_to = None
         chore.readyForApproval = False
         chore.put()
+
 
 class MarkChore(base_handlers.BaseAction):
     def handle_post(self, user):
@@ -94,4 +96,3 @@ class MarkChore(base_handlers.BaseAction):
         else:
             raise Exception("Cannot mark this chore")
         chore.put()
-            

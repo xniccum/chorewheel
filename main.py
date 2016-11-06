@@ -19,7 +19,7 @@ import os
 import jinja2
 import webapp2
 
-from handlers import main_handler, group_handlers, login_handler, chore_handlers, user_handlers
+from handlers import main_handler, group_handlers, login_handler, chore_handlers, user_handlers, notifier_handler
 
 
 # Jinja environment instance necessary to use Jinja templates.
@@ -63,5 +63,5 @@ app = webapp2.WSGIApplication([
     ('/invite', user_handlers.Invite),
 
     # Notifier
-    ('/notify')
+    ('/notify', notifier_handler.Notify)
 ], debug=True)

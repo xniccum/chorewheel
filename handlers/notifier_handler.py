@@ -7,7 +7,7 @@ from google.appengine.api import mail
 from models import Chore
 
 
-class InsertMember(webapp2.RequestHandler):
+class Notify(webapp2.RequestHandler):
     def post(self):
         chores = Chore.query(ancestor=Chore.PARENT_KEY)
         for chore in chores:
