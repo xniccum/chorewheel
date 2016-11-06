@@ -59,3 +59,8 @@ table > th {
 .mdl-card__title-text {
 	font-size: 18px;
 }
+
+.mdl-list__item {
+	cursor: move;
+	border-shadow: 2px;
+}

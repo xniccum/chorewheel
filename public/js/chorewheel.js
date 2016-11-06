@@ -47,6 +47,9 @@ rh.chorewheel.groupsInit = function() {
 
 // Chores page init
 rh.chorewheel.choresInit = function() {
+	//Init sortable
+	rh.chorewheel.sortableInit();
+	
 	// Initialize the date picker widget.
 	$("input[name=due]").bootstrapMaterialDatePicker({
 		format : 'MM-DD-YYYY hh:mm A',
@@ -135,6 +138,56 @@ rh.chorewheel.choreInsertInit = function() {
 rh.chorewheel.membersInit = function() {
 	console.log("TODO");
 }
+
+rh.chorewheel.sortableInit = function() {
+	var stop = function(el, li) {
+		$this = $(li.item);
+		var sorter = $(this);
+		var choreKey = $this.find(".chore-key").html();
+		console.log($this.closest(".mdl-card"));
+		if ($this.closest(".mdl-card").length > 0) {
+			var userKey = $this.closest(".mdl-card").find(".user-key").html();
+			console.log("userKey: " + userKey);
+			$.ajax({
+				url: "/assign-chore",
+				method: "POST",
+				data: {
+					chorekey: choreKey,
+					assignto: userKey
+				},
+				success: function() {
+					window.location.reload();
+				},
+				error: function() {
+					sorter.sortable("cancel");
+				}
+			});
+		} else {
+			$.ajax({
+				url: "/unassign-chore",
+				method: "POST",
+				data: {
+					chorekey: choreKey
+				},
+				success: function() {
+					window.location.reload();
+				},
+				error: function() {
+					sorter.sortable("cancel");
+				}
+			});
+		}
+	}
+	
+	var sortable = $(".chores-list, .assigned-chores").sortable({
+		appendTo: document.body,
+		helper: "clone",
+		connectWith: ".assigned-chores, .chores-list",
+		items: "> li",
+		stop: stop,
+		scroll: true
+	});
+};
 
 // Keep at end of file. Call init functions
 $(document).ready(function() {
