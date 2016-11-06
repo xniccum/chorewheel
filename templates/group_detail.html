@@ -1,17 +1,23 @@
 {% extends "templates/base.html" %} {% block content %}
 <br>
 <br>
-<div style="margin-left: auto; margin-right: auto; width: 25%;">
-	<a href="/insert-chore-page?groupkey={{ groupkey.urlsafe() }}"
-		class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary">
-		<i class="material-icons">add</i> Add Chore
-	</a>
 
-	<button id="chores-add-member"
-		class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-		<i class="material-icons">add</i> Add Member
-	</button>
-</div>
+{% for admin in admins %}
+	{% if admin.urlsafe() == user_key.urlsafe() %}
+		<div style="margin-left: auto; margin-right: auto; width: 25%;">
+			<a href="/insert-chore-page?groupkey={{ groupkey.urlsafe() }}"
+				class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary">
+				<i class="material-icons">add</i> Add Chore
+			</a>
+		
+			<button id="chores-add-member"
+				class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+				<i class="material-icons">add</i> Add Member
+			</button>
+		</div>
+		{% break %}
+	{% endif %}
+{% endfor %}
 
 <div class="mdl-tabs mdl-js-tabs">
 	<div class="mdl-tabs__tab-bar">
@@ -56,22 +62,29 @@
                     {% endif %}
 					<td class="chore-points">{{ chore.points }}</td>
 					<td class="chore-due">{{ chore.due }}</td>
-					<td><a
-						href="/insert-chore-page?chorekey={{ chore.key.urlsafe() }}"
-						class="mdl-button mdl-js-button"> <i class="material-icons">mode
-								edit</i>
-					</a> {% if (chore.assigned_to and chore.assigned_to.urlsafe() == user_key.urlsafe() and not
+					<td>{% if (chore.assigned_to and chore.assigned_to.urlsafe() == user_key.urlsafe() and not
 						chore.readyForApproval) %}
-						<button class="mdl-button mdl-js-button mark-for-approval">
-							<i class="material-icons">done</i>
-						</button> {% elif (chore.assigned_to and chore.assigned_to.urlsafe() != user_key.urlsafe() and
-						chore.readyForApproval) %}
-						<button class="mdl-button mdl-js-button mark-approved">
-							<i class="material-icons">done</i>
-						</button> {% endif %}
-						<button class="mdl-button mdl-js-button chores-delete-button">
-							<i class="material-icons">delete</i>
-						</button></td>
+							<button class="mdl-button mdl-js-button mark-for-approval">
+								<i class="material-icons">done</i>
+							</button> {% elif (chore.assigned_to and chore.assigned_to.urlsafe() != user_key.urlsafe() and
+							chore.readyForApproval) %}
+							<button class="mdl-button mdl-js-button mark-approved">
+								<i class="material-icons">done</i>
+							</button>
+						{% endif %}
+						{% for admin in admins %}
+							{% if admin.urlsafe() == user_key.urlsafe() %}
+								<a
+								href="/insert-chore-page?chorekey={{ chore.key.urlsafe() }}"
+								class="mdl-button mdl-js-button"> <i class="material-icons">mode
+										edit</i>
+								</a> 
+								<button class="mdl-button mdl-js-button chores-delete-button">
+									<i class="material-icons">delete</i>
+								</button></td>
+								{% break %}
+							{% endif %}
+						{% endfor %}
 				</tr>
 				{% endfor %}
 			</tbody>
@@ -94,12 +107,17 @@
 					<td>{{ member.email }}</td>
 					<td>{{ points[member.email] }}</td>
 					<td>
-						<button class="mdl-button mdl-js-button">
-							<i class="material-icons">edit</i>
-						</button>
-						<button class="mdl-button mdl-js-button">
-							<i class="material-icons">delete</i>
-						</button>
+					{% for admin in admins %}
+						{% if admin.urlsafe() == user_key.urlsafe() %}
+							<button class="mdl-button mdl-js-button">
+								<i class="material-icons">edit</i>
+							</button>
+							<button class="mdl-button mdl-js-button">
+								<i class="material-icons">delete</i>
+							</button>
+							{% break %}
+						{% endif %}
+					{% endfor %}
 					</td>
 				</tr>
 				{% endfor %}

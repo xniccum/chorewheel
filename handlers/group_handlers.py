@@ -15,24 +15,26 @@ class GroupPage(base_handlers.BasePage):
             return "templates/groups.html"
 
     def update_values(self, google_user, values):
+        values["user_key"] = User.get_by_user(google_user).key
         if self.request.get("group-key"):
             group_key = ndb.Key(urlsafe=self.request.get('group-key'))
             values["groupkey"] = group_key
             values["chores"] = Chore.get_by_group(group_key)
-            values["user_key"] = User.get_by_user(google_user).key
+            group = group_key.get()
 
             members = []
             points = {}
-            for member_key in group_key.get().members:
+            for member_key in group.members:
                 member = member_key.get()
                 members.append(member)
-                chores = Chore.query(ancestor=Chore.PARENT_KEY).filter(Chore.assigned_to == member_key)
+                chores = Chore.query(ancestor=Chore.PARENT_KEY).filter(Chore.assigned_to == member_key, Chore.group_id == group.key)
                 sum = 0
                 if chores.count() != 0:
                     for chore in chores:
                         sum += chore.points
                 points[member.email] = sum
 
+            values["admins"] = group.admins
             values["members"] = members
             values["points"] = points
         else:

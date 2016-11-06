@@ -23,12 +23,17 @@
 					{% endfor %}
 				</td>
 				<td>
+				{% for admin in group.admins %}
+					{% if admin.urlsafe() == user_key.urlsafe() %}
 					<button class="mdl-button mdl-js-button groups-edit-button">
 						<i class="material-icons">edit</i>
 					</button>
 					<button class="mdl-button mdl-js-button groups-delete-button">
 						<i class="material-icons">delete</i>
 					</button>
+					{% break %}
+					{% endif %}
+				{% endfor %}
 				</td>
 			</tr>
 			{% endfor %}
