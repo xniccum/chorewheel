@@ -55,3 +55,7 @@ table > th {
 .home-card .mdl-cell {
   text-align: center;
 }
+
+.mdl-card__title-text {
+	font-size: 18px;
+}

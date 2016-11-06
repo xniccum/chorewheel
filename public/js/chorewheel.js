@@ -106,7 +106,7 @@ rh.chorewheel.choresInit = function() {
 	});
 	
 	$(".mark-for-approval").click(function() {
-		var choreKey = $(this).closest("tr").find(".chore-key").html();
+		var choreKey = $(this).closest(".mdl-list__item").find(".chore-key").html();
 		$.ajax({
 			url: "/mark-chore",
 			method: "POST",

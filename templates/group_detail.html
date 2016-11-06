@@ -19,7 +19,7 @@
 	{% endif %}
 {% endfor %}
 
-<div class="mdl-tabs mdl-js-tabs">
+<!--<div class="mdl-tabs mdl-js-tabs">
 	<div class="mdl-tabs__tab-bar">
 		<a href="#Chores" style="width: 37.5%" class="mdl-tabs__tab is-active">Chores</a> <a
 			href="#Members" style="width: 37.5%" class="mdl-tabs__tab">Members</a>
@@ -124,7 +124,100 @@
 			</tbody>
 		</table>
 	</div>
+</div>-->
+
+<div class="mdl-grid">
+	
+	<ul class="chores-list mdl-list mdl-cell mdl-cell--4-col">
+		<li><strong>Chores</strong></li>
+		{% for chore in chores %}
+			{% if chore.assigned_to is none %}
+				<li class="mdl-list__item">
+					<span class="chore-key hidden">{{ chore.key.urlsafe() }}</span>
+					<span class="chore-frequency hidden">{{ chore.frequency }}</span>
+					{{ chore.name }} ({{ chore.points }})
+					{% for admin in admins %}
+						{% if admin.urlsafe() == user_key.urlsafe() %}
+							<a
+							href="/insert-chore-page?chorekey={{ chore.key.urlsafe() }}"
+							class="mdl-list__item-secondary-action"> <i class="material-icons">mode
+									edit</i>
+							</a> 
+							<button class="mdl-button mdl-js-button chores-delete-button">
+								<i class="material-icons">delete</i>
+							</button></td>
+							{% break %}
+						{% endif %}
+					{% endfor %}
+				</li>
+			{% endif %}
+		{% endfor %}
+	</ul>
+	
+	<ul class="members-list mdl-list mdl-cell mdl-cell--4-col">
+		<li><strong>Members</strong></li>
+		{% for member in members %}
+		<li class="mdl-list__item">
+			<div class="mdl-card mdl-shadow--2dp">
+				<div class="mdl-card__title">
+				    <h6 class="mdl-card__title-text">{{ member.email }}</h6>
+				</div>
+				<div class="mdl-card__supporting-text">
+					<ul class="assigned-chores mdl-list">
+					{% for chore in chores %}
+						{% if chore.assigned_to and chore.assigned_to.urlsafe() == member.key.urlsafe() and not chore.readyForApproval %}
+							<li class="mdl-list__item">
+								<span class="chore-key hidden">{{ chore.key.urlsafe() }}</span>
+								{{ chore.name }} ({{ chore.points }})
+								{% if (chore.assigned_to and chore.assigned_to.urlsafe() == user_key.urlsafe() and not
+									chore.readyForApproval) %}
+										<button class="mdl-button mdl-js-button mark-for-approval">
+											<i class="material-icons">done</i>
+										</button>
+								{% endif %}
+							</li>
+						{% endif %}
+					{% endfor %}
+					</ul>
+					<div class="mdl-card__actions mdl-card--border">
+					    {% for admin in admins %}
+							{% if admin.urlsafe() == user_key.urlsafe() %}
+								<button class="mdl-button mdl-js-button">
+									<i class="material-icons">edit</i>
+								</button>
+								<button class="mdl-button mdl-js-button">
+									<i class="material-icons">delete</i>
+								</button>
+								{% break %}
+							{% endif %}
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</li>
+		{% endfor %}
+	</ul>
+	
+	<ul class="approval-list mdl-list mdl-cell mdl-cell--4-col">
+		<li><strong>Ready for Approval</strong>
+		{% for chore in chores %}
+			{% if chore.readyForApproval %}
+				<li class="mdl-list__item">
+					{{ chore.name }} ({{ chore.points }})
+					{% if (chore.assigned_to and chore.assigned_to.urlsafe() != user_key.urlsafe() and
+						chore.readyForApproval) %}
+						<button class="mdl-button mdl-js-button mark-approved">
+							<i class="material-icons">done</i>
+						</button>
+					{% endif %}
+				</li>
+			{% endif %}
+		{% endfor %}
+	</ul>
+	
 </div>
+
+
 {% endblock %} {% block modals %}
 <dialog id="members-add-dialog" class="mdl-dialog">
 <h4 class="mdl-dialog__title">New Member</h4>
