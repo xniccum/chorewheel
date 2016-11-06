@@ -16,6 +16,14 @@ handlers:
 - url: /
   script: main.app
 
+- url: /invite
+  script: main.app
+  login: admin
+
+- url: /notify
+  script: main.app
+  login: admin
+
 - url: .*
   script: main.app
   login: required

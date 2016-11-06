@@ -1,0 +1,4 @@
+cron:
+- description: Daily Job Notifier
+  url: /notify
+  schedule: every 24 hours

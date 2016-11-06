@@ -13,20 +13,18 @@ class Invite(base_handlers.BaseAction):
         group = group_key.get()
         email = self.request.get("email")
         if mail.is_email_valid(email):
-            logging.info('3')
             url = "http://chore-wheel-project.appspot.com/add-member?"
             url += "group-key=" + self.request.get("group-key") + "&"
-            url += "email=" + email + "&"
+            url += "email=" + self.request.get("email") + "&"
             url += "admin=" + self.request.get("is-admin")
 
-            sender_address = 'anything@{}.appspotmail.com>'.format(app_identity.get_application_id())
+            sender_address = 'anything@{}.appspotmail.com'.format(app_identity.get_application_id())
             subject = "Chore-Wheel Invitation"
             body = """You have been invited to join the {} Chore-Wheel group
                     If you wish to join this group, go to:
 
                     {}""".format(group.name, url)
             mail.send_mail(sender_address, email, subject, body)
-            logging.info('4')
         else:
             logging.debug('Email not Valid')
         self.redirect(self.request.referer)
@@ -44,17 +42,17 @@ class InsertMember(base_handlers.BaseAction):
                 group.admins.remove(member_key)
             group.put()
         else:
-            member = User.query(ancestor=User.PARENT_KEY).filter(User.email == self.request.get("member-email")).get()
+            member = User.query(ancestor=User.PARENT_KEY).filter(User.email == self.request.get("email")).get()
             if not member:
                 member = User(parent=User.PARENT_KEY,
-                              email=self.request.get("member-email"),
+                              email=self.request.get("email"),
                               groups=[group_key])
             key = member.put()
-            if self.request.get("member-admin"):
+            if self.request.get("admin"):
                 group.admins.append(key)
             group.members.append(key)
             group.put()
-        self.redirect(self.request.referer)
+        self.redirect('/groups?group-key='+self.request.get("group-key"))
 
 
 class DeleteMember(base_handlers.BaseAction):

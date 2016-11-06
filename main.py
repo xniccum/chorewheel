@@ -59,5 +59,8 @@ app = webapp2.WSGIApplication([
     ('/add-member', user_handlers.InsertMember),
     ('/edit-member', user_handlers.InsertMember),
     ('/delete-member', user_handlers.DeleteMember),
-    ('/invite', user_handlers.Invite)
+    ('/invite', user_handlers.Invite),
+
+    # Notifier
+    ('/notify')
 ], debug=True)
