@@ -1,3 +1,6 @@
+import json
+
+from google.appengine.api import users
 from google.appengine.ext import ndb
 
 from handlers import base_handlers
@@ -16,7 +19,7 @@ class GroupPage(base_handlers.BasePage):
             group_key = ndb.Key(urlsafe=self.request.get('group-key'))
             values["groupkey"] = group_key
             values["chores"] = Chore.get_by_group(group_key)
-            values["user_key"] = User.get_by_user(google_user)
+            values["user_key"] = User.get_by_user(google_user).key
 
             members = []
             points = {}
@@ -34,6 +37,8 @@ class GroupPage(base_handlers.BasePage):
             values["points"] = points
         else:
             values["groups"] = User.get_groups(google_user)
+            db_user = User.get_by_user(google_user)
+            values["upcoming"] = Chore.get_upcoming_by_user(db_user.key)
 
 
 class InsertGroup(base_handlers.BaseAction):

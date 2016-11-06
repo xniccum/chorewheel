@@ -60,11 +60,11 @@
 						href="/insert-chore-page?chorekey={{ chore.key.urlsafe() }}"
 						class="mdl-button mdl-js-button"> <i class="material-icons">mode
 								edit</i>
-					</a> {% if (chore.assigned_to and chore.assigned_to == user_key and not
+					</a> {% if (chore.assigned_to is defined and chore.assigned_to.urlsafe() == user_key.urlsafe() and not
 						chore.readyForApproval) %}
 						<button class="mdl-button mdl-js-button mark-for-approval">
 							<i class="material-icons">done</i>
-						</button> {% elif (chore.assigned_to and chore.assigned_to != user_key and
+						</button> {% elif (chore.assigned_to and chore.assigned_to.urlsafe() != user_key.urlsafe() and
 						chore.readyForApproval) %}
 						<button class="mdl-button mdl-js-button mark-approved">
 							<i class="material-icons">done</i>

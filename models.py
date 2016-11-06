@@ -76,4 +76,8 @@ class Chore(ndb.Model):
     @classmethod
     def get_by_group(cls, group_id):
         return cls.query(ancestor=cls.PARENT_KEY).filter(cls.group_id == group_id)
+    
+    @classmethod
+    def get_upcoming_by_user(cls, user_id):
+        return cls.query(ancestor=cls.PARENT_KEY).filter(cls.assigned_to == user_id).order(cls.due)
 
