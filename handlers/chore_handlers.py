@@ -2,6 +2,7 @@ from handlers import base_handlers
 from google.appengine.ext import ndb
 from models import Chore
 from utils import date_utils
+from datetime import datetime, timedelta
 
         
 class InsertChorePage(base_handlers.BasePage):
@@ -37,6 +38,7 @@ class InsertChore(base_handlers.BaseAction):
             group_key = ndb.Key(urlsafe=self.request.get("group-key"))
             chore = Chore(parent=Chore.PARENT_KEY,
                           name=self.request.get("name"),
+                          readyForApproval=False,
                           due=date_utils.get_utc_datetime_from_user_input("US/Eastern", self.request.get("due")),
                           frequency= self.request.get("frequency"),
                           points=int(self.request.get("points")))
@@ -59,4 +61,29 @@ class AssignChore(base_handlers.BaseAction):
         chore_key = ndb.Key(urlsafe=self.request.get('chorekey'))
         chore = chore_key.get()
         chore.assigned_to = assign_to
+        chore.readyForApproval = False
         chore.put()
+
+class MarkChore(base_handlers.BaseAction):
+    def handle_post(self, user):
+        chore_key = ndb.Key(urlsafe=self.request.get("chorekey"))
+        chore = chore_key.get()
+        db_user = chore.assigned_to.get()
+        if not chore.readyForApproval and db_user.email.lower() == user.email().lower():
+            chore.readyForApproval = True
+        elif chore.readyForApproval and db_user.email.lower() != user.email().lower():
+            chore.readyForApproval = False
+            chore.assigned_to = None
+            curr_due = datetime.strptime(chore.due, "%m/%d/%y")
+            if chore.frequency == "1 day":
+                next_due = curr_due + timedelta(days=1)
+            elif chore.frequency == "1 week":
+                next_due = curr_due + timedelta(days=7)
+            elif chore.frequency == "2 week":
+                next_due = curr_due + timedelta(days=14)
+            elif chore.frequency == "1 month":
+                next_due = curr_due + timedelta(days=30)
+        else:
+            raise Exception("Cannot mark this chore")
+        chore.put()
+            

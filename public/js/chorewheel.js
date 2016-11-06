@@ -104,6 +104,20 @@ rh.chorewheel.choresInit = function() {
 			}
 		});
 	});
+	
+	$(".mark-for-approval").click(function() {
+		var choreKey = $(this).closest("tr").find(".chore-key").html();
+		$.ajax({
+			url: "/mark-chore",
+			method: "POST",
+			data: {
+				chorekey: choreKey
+			},
+			success: function() {
+				window.location.reload();
+			}
+		});
+	});
 };
 
 rh.chorewheel.choreInsertInit = function() {

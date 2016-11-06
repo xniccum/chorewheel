@@ -52,6 +52,7 @@ app = webapp2.WSGIApplication([
     ('/edit-chore', chore_handlers.InsertChore),
     ('/delete-chore', chore_handlers.DeleteChore),
     ('/assign-chore', chore_handlers.AssignChore),
+    ('/mark-chore', chore_handlers.MarkChore),
 
 
     # Members-CRUD
