@@ -108,38 +108,13 @@
 	</div>
 </div>
 {% endblock %} {% block modals %}
-<dialog id="members-add-dialog" class="mdl-dialog">
-<h4 class="mdl-dialog__title">New Member</h4>
-<form action="/add-member" method="post">
-	<div class="mdl-dialog__content">
-        <input style="display: none;" type="text" name="group-key"
-			value="{{ groupkey }}">
-		<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-			<input class="mdl-textfield__input" type="text" name="email">
-			<label class="mdl-textfield__label" for="email">Email</label>
-		</div>
-		<label for="member_admin"
-			class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"> <input
-			type="checkbox" id="member_admin" class="mdl-checkbox__input"
-			name="is_admin"> <span class="mdl-checkbox__label">Admin</span>
-		</label>
-	</div>
-	<div class="mdl-dialog__actions">
-		<button type="submit" class="mdl-button">Invite</button>
-		<button type="button" class="mdl-button close">Cancel</button>
-	</div>
-</form>
-</dialog>
-
 <dialog id="members-edit-dialog" class="mdl-dialog">
 <h4 class="mdl-dialog__title">Edit Member</h4>
 <form action="/edit-member" method="post">
 	<div class="mdl-dialog__content">
-		<input style="display: none;" type="text" name="key"
-			id="members-edit-key"> <label id="member-edit-admin"
-			for="member_admin"
-			class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"> <input
-			type="checkbox" class="mdl-checkbox__input" name="is_admin">
+		<input style="display: none;" type="text" name="key" id="members-edit-key">
+        <label id="member-edit-admin" for="member_admin" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+            <input type="checkbox" class="mdl-checkbox__input" name="is_admin">
 			<span class="mdl-checkbox__label">Admin</span>
 		</label>
 	</div>
@@ -219,7 +194,7 @@
 	<i class="material-icons">add</i>Invite Member
 </h4>
 <div class="mdl-dialog__content">
-	<form action="/add-member" method="post">
+	<form action="/invite" method="post">
 		<div class="mdl-dialog__content">
 			<div
 				class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
@@ -228,9 +203,10 @@
 			</div>
 		</div>
 		<div class="mdl-dialog__content">
+            <input style="display: none;" type="text" name="group-key" value="{{ groupkey.urlsafe() }}">
 			<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"
 				for="is_admin"> <span class="mdl-checkbox__label">Admin?</span>
-				<input type="checkbox" id="is_admin" class="mdl-checkbox__input">
+				<input type="checkbox" name="is-admin" id="is_admin" class="mdl-checkbox__input">
 			</label>
 		</div>
 		<div class="mdl-dialog__actions">

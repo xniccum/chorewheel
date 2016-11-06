@@ -51,7 +51,8 @@ class DeleteChore(base_handlers.BaseAction):
         chore_key = ndb.Key(urlsafe=self.request.get('chore-key'))
         chore_key.delete()
         self.redirect(self.request.referer)
-        
+
+
 class AssignChore(base_handlers.BaseAction):
     def handle_post(self, user):
         assign_to = ndb.Key(urlsafe=self.request.get('assignto'))

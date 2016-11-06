@@ -1,33 +1,42 @@
 from google.appengine.api import app_identity
 from google.appengine.api import mail
+import logging
 
 from handlers import base_handlers
 from google.appengine.ext import ndb
 from models import User
 
 
+class Invite(base_handlers.BaseAction):
+    def handle_post(self, google_user):
+        group_key = ndb.Key(urlsafe=self.request.get("group-key"))
+        group = group_key.get()
+        email = self.request.get("email")
+        if mail.is_email_valid(email):
+            logging.info('3')
+            url = "http://chore-wheel-project.appspot.com/add-member?"
+            url += "group-key=" + self.request.get("group-key") + "&"
+            url += "email=" + email + "&"
+            url += "admin=" + self.request.get("is-admin")
+
+            sender_address = 'anything@{}.appspotmail.com>'.format(app_identity.get_application_id())
+            subject = "Chore-Wheel Invitation"
+            body = """You have been invited to join the {} Chore-Wheel group
+                    If you wish to join this group, go to:
+
+                    {}""".format(group.name, url)
+            mail.send_mail(sender_address, email, subject, body)
+            logging.info('4')
+        else:
+            logging.debug('Email not Valid')
+        self.redirect(self.request.referer)
+
+
 class InsertMember(base_handlers.BaseAction):
     def handle_post(self, google_user):
         group_key = ndb.Key(urlsafe=self.request.get("group-key"))
         group = group_key.get()
-        if self.request.get("send"):
-            email = self.request.get("member-email")
-            if mail.is_email_valid(email):
-                url = "http://chore-wheel-project.appspot.com/invite?"
-                url += "group-key="+self.request.get("group-key")+"&"
-                url += "email="+self.request.get("member-email")+"&"
-                url += "admin="+self.request.get("member-admin")
-
-                sender_address = ('Chore-Wheel.com Support <{}@appspot.gserviceaccount.com>'.format(app_identity.get_application_id()))
-                subject = "Chore-Wheel Invitation"
-                body="""You have been invited to join the {} Chore-Wheel group
-                If you wish to join this group, go to:
-
-                {}""".format(group.name, url)
-                mail.send_mail(sender_address, email, subject, body)
-            else:
-                pass
-        elif self.request.get("member-key"):
+        if self.request.get("member-key"):
             member_key = ndb.Key(urlsafe=self.request.get("member-key"))
             if bool(self.request.get("member-admin")):
                 group.admins.append(member_key)

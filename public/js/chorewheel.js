@@ -19,7 +19,7 @@ rh.chorewheel.sharedInit = function() {
 		var nearestDialog = $(this).closest("dialog").get(0);
 		nearestDialog.close();
 	});
-}
+};
 
 // Groups page init
 rh.chorewheel.groupsInit = function() {
@@ -118,9 +118,7 @@ rh.chorewheel.choreInsertInit = function() {
 	}
 };
 
-rh.chorewheel.membersInit = function() {
-	console.log("TODO");
-}
+rh.chorewheel.membersInit = function() {};
 
 // Keep at end of file. Call init functions
 $(document).ready(function() {

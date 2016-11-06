@@ -57,5 +57,6 @@ app = webapp2.WSGIApplication([
     # Members-CRUD
     ('/add-member', user_handlers.InsertMember),
     ('/edit-member', user_handlers.InsertMember),
-    ('/delete-member', user_handlers.DeleteMember)
+    ('/delete-member', user_handlers.DeleteMember),
+    ('/invite', user_handlers.Invite)
 ], debug=True)
