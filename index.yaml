@@ -14,6 +14,13 @@ indexes:
   ancestor: yes
   properties:
   - name: assigned_to
+  - name: readyForApproval
+  - name: due
+
+- kind: Chore
+  ancestor: yes
+  properties:
+  - name: assigned_to
   - name: due
 
 - kind: Chore
