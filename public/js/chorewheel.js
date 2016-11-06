@@ -86,7 +86,7 @@ rh.chorewheel.choresInit = function() {
 	});
 	
 	$(".chores-delete-button").click(function() {
-		var key = $(this).closest("tr").find(".chore-key").html();
+		var key = $(this).closest(".mdl-list__item").find(".chore-key").html();
 		$("#chores-delete-key").val(key);
 		
 		document.querySelector("#chores-delete-dialog").showModal();

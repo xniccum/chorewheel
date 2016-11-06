@@ -60,7 +60,10 @@ table > th {
 	font-size: 18px;
 }
 
-.mdl-list__item {
+.chores-list > .mdl-list__item, .assigned-chores > .mdl-list__item {
 	cursor: move;
-	border-shadow: 2px;
+}
+
+.chores-list > .mdl-list__item:hover, .assigned-chores > .mdl-list__item:hover {
+	box-shadow: 0px 3px 1px #888888;
 }
