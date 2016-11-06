@@ -15,8 +15,8 @@
 
 <div class="mdl-tabs mdl-js-tabs">
 	<div class="mdl-tabs__tab-bar">
-		<a href="#Chores" class="mdl-tabs__tab is-active">Tab 1</a> <a
-			href="#Members" class="mdl-tabs__tab">Tab 2</a>
+		<a href="#Chores" style="width: 37.5%" class="mdl-tabs__tab is-active">Chores</a> <a
+			href="#Members" style="width: 37.5%" class="mdl-tabs__tab">Members</a>
 	</div>
 	<div class="mdl-tabs__panel is-active" id="Chores">
 		<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp center">
@@ -34,24 +34,26 @@
 				<tr>
 					<td class="chore-key hidden">{{ chore.key.urlsafe() }}</td>
 					<td class="chore-frequency hidden">{{ chore.frequency }}</td>
-					<td class="chore-name">{{ chore.name }}</td> {% if
-					chore.assigned_to is not none %}
-					<td>{{ chore.assigned_to }}</td> {% else %}
-					<td>
-						<div id="list-select"
-							class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fullwidth">
-							<input class="mdl-textfield__input" type="text" id="assigned-to"
-								name="assigned-to" tabIndex="-1" /> <label
-								class="mdl-textfield__label" for="assigned-to">Assigned
-								To</label>
-							<ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu"
-								for="assigned-to">
-								{% for member in members %}
-								<li class="mdl-menu__item" data-val="{{ member.key.urlsafe() }}">{{
-									member.email }}</li> {% endfor %}
-							</ul>
-						</div>
-					</td> {% endif %}
+					<td class="chore-name">{{ chore.name }}</td>
+                    {% if chore.assigned_to is not none %}
+                        <td>{{ chore.assigned_to.get().name }}</td>
+                    {% else %}
+                        <td>
+                            <div id="list-select"
+                                class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fullwidth">
+                                <input class="mdl-textfield__input" type="text" id="assigned-to"
+                                    name="assigned-to" tabIndex="-1" /> <label
+                                    class="mdl-textfield__label" for="assigned-to">Assigned
+                                    To</label>
+                                <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu"
+                                    for="assigned-to">
+                                    {% for member in members %}
+                                    <li class="mdl-menu__item" data-val="{{ member.key.urlsafe() }}">{{
+                                        member.email }}</li> {% endfor %}
+                                </ul>
+                            </div>
+                        </td>
+                    {% endif %}
 					<td class="chore-points">{{ chore.points }}</td>
 					<td class="chore-due">{{ chore.due }}</td>
 					<td><a
@@ -110,8 +112,9 @@
 <h4 class="mdl-dialog__title">New Member</h4>
 <form action="/add-member" method="post">
 	<div class="mdl-dialog__content">
-		<div
-			class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input style="display: none;" type="text" name="group-key"
+			value="{{ groupkey }}">
+		<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
 			<input class="mdl-textfield__input" type="text" name="email">
 			<label class="mdl-textfield__label" for="email">Email</label>
 		</div>
@@ -170,7 +173,7 @@
 <form action="/add-chore" method="post">
 	<div class="mdl-dialog__content">
 		<input style="display: none;" type="text" name="group_id"
-			value="{{ groupkey }}">
+			value="{{ groupkey.urlsafe() }}">
 		<div
 			class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
 			<input class="mdl-textfield__input" type="text" name="name">
