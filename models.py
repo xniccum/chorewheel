@@ -48,7 +48,7 @@ class Group(ndb.Model):
 
     @classmethod
     def delete_group(cls, key):
-        users_query = User.query(ansestor=User.PARENT_KEY)
+        users_query = User.query(ancestor=User.PARENT_KEY)
         for u in users_query:
             i = 0
             changed = False
