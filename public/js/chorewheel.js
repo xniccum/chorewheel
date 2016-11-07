@@ -161,13 +161,7 @@ rh.chorewheel.membersInit = function() {
 		var key = $(this).closest(".mdl-card__title").find(".user-key").html();
 		$("#members-edit-key").val(key);
 
-		document.querySelector("#chores-edit-dialog").showModal();
-
-		$("#chores-edit-key").val(key);
-		document.querySelector("#chores-edit-name").MaterialTextfield.change(name);
-		document.querySelector("#chores-edit-due").MaterialTextfield.change(due);
-		document.querySelector("#chores-edit-points").MaterialTextfield.change(points);
-		$("#chores-edit-dialog input[name=frequency]").attr("data-val", frequency);
+		document.querySelector("#members-edit-dialog").showModal();
 	});
 };
 

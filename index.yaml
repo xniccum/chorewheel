@@ -58,3 +58,9 @@ indexes:
   - name: assigned_to
   - name: readyForApproval
   - name: due
+
+- kind: Chore
+  ancestor: yes
+  properties:
+  - name: readyForApproval
+  - name: assigned_to
