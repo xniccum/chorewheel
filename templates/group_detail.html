@@ -97,6 +97,7 @@
 		{% for chore in chores %}
 			{% if chore.readyForApproval %}
 				<li class="mdl-list__item">
+					<span class="chore-key hidden">{{ chore.key.urlsafe() }}</span>
 					{{ chore.name }} ({{ chore.points }})
 					{% if (chore.assigned_to and chore.assigned_to.urlsafe() != user_key.urlsafe() and
 						chore.readyForApproval) %}
