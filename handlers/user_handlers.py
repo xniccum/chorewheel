@@ -1,9 +1,10 @@
-from google.appengine.api import app_identity
-from google.appengine.api import mail
 import logging
 
-from handlers import base_handlers
+from google.appengine.api import app_identity, users
+from google.appengine.api import mail
 from google.appengine.ext import ndb
+
+from handlers import base_handlers
 from models import User
 
 
@@ -52,7 +53,8 @@ class InsertMember(base_handlers.BaseAction):
                 group.admins.append(key)
             group.members.append(key)
             group.put()
-        self.redirect('/groups?group-key='+self.request.get("group-key"))
+        self.redirect(users.create_login_url('/login-success?group-key='+self.request.get("group-key")))
+        #self.redirect('/groups?group-key='+self.request.get("group-key"))
 
 
 class DeleteMember(base_handlers.BaseAction):

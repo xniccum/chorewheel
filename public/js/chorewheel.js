@@ -121,6 +121,20 @@ rh.chorewheel.choresInit = function() {
 			}
 		});
 	});
+	
+	$(".mark-approved").click(function() {
+		var choreKey = $(this).closest(".mdl-list__item").find(".chore-key").html();
+		$.ajax({
+			url: "/mark-chore",
+			method: "POST",
+			data: {
+				chorekey: choreKey
+			},
+			success: function() {
+				window.location.reload();
+			}
+		});
+	});
 };
 
 rh.chorewheel.choreInsertInit = function() {

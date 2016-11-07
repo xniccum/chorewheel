@@ -11,11 +11,11 @@ class User(ndb.Model):
 
     @classmethod
     def get_by_user(cls, user):
-        return cls.query(ancestor=User.PARENT_KEY).filter(cls.email == user.email()).get()
+        return cls.query(ancestor=User.PARENT_KEY).filter(cls.email == user.email().lower()).get()
 
     @classmethod
     def get_groups(cls, google_user):
-        member = cls.query(ancestor=cls.PARENT_KEY).filter(cls.email == google_user.email()).get()
+        member = cls.query(ancestor=cls.PARENT_KEY).filter(cls.email == google_user.email().lower()).get()
         groups = []
         for group in member.groups:
             groups.append(group.get())

@@ -9,7 +9,7 @@ from models import Chore
 
 class Notify(webapp2.RequestHandler):
     def post(self):
-        chores = Chore.query(ancestor=Chore.PARENT_KEY)
+        chores = Chore.query(ancestor=Chore.PARENT_KEY).filter(Chore.assigned_to != None, Chore.readyForApproval == False)
         for chore in chores:
             now = datetime.now()
             if chore.due >= now:

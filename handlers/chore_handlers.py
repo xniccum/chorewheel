@@ -84,15 +84,15 @@ class MarkChore(base_handlers.BaseAction):
         elif chore.readyForApproval and db_user.email.lower() != user.email().lower():
             chore.readyForApproval = False
             chore.assigned_to = None
-            curr_due = datetime.strptime(chore.due, "%m/%d/%y")
             if chore.frequency == "1 day":
-                next_due = curr_due + timedelta(days=1)
+                next_due = chore.due + timedelta(days=1)
             elif chore.frequency == "1 week":
-                next_due = curr_due + timedelta(days=7)
+                next_due = chore.due + timedelta(days=7)
             elif chore.frequency == "2 week":
-                next_due = curr_due + timedelta(days=14)
+                next_due = chore.due + timedelta(days=14)
             elif chore.frequency == "1 month":
-                next_due = curr_due + timedelta(days=30)
+                next_due = chore.due + timedelta(days=30)
+            chore.due = next_due
         else:
             raise Exception("Cannot mark this chore")
         chore.put()
