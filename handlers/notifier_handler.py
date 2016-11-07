@@ -12,7 +12,7 @@ class Notify(webapp2.RequestHandler):
         chores = Chore.query(ancestor=Chore.PARENT_KEY).filter(Chore.assigned_to != None, Chore.readyForApproval == False)
         for chore in chores:
             now = datetime.now()
-            if chore.due >= now:
+            if chore.due <= now:
                 sender_address = 'anything@{}.appspotmail.com'.format(app_identity.get_application_id())
                 subject = "Chore-Wheel Invitation"
                 email = chore.assigned_to.get().email
