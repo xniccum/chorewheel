@@ -79,7 +79,7 @@
 									<button class="mdl-button mdl-js-button">
 										<i class="material-icons">edit</i>
 									</button>
-									<button class="mdl-button mdl-js-button">
+									<button class="mdl-button mdl-js-button members-delete-button">
 										<i class="material-icons">delete</i>
 									</button>
 								</div>
@@ -134,7 +134,7 @@
 <h4 class="mdl-dialog__title">Delete member?</h4>
 <form action="/delete-member" method="post">
 	<div class="mdl-dialog__content">
-		<input style="display: none;" type="text" name="key"
+		<input style="display: none;" type="text" name="member-key"
 			id="members-delete-key">
 		<p>
 			Are you sure you want to delete the member <span class="member-name"></span>

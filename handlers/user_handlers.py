@@ -36,7 +36,7 @@ class InsertMember(base_handlers.BaseAction):
         group = group_key.get()
         if self.request.get("member-key"):
             member_key = ndb.Key(urlsafe=self.request.get("member-key"))
-            if bool(self.request.get("member-admin")):
+            if bool(self.request.get("admin")):
                 group.admins.append(member_key)
             else:
                 group.admins.remove(member_key)

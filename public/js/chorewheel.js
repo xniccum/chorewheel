@@ -135,7 +135,27 @@ rh.chorewheel.choreInsertInit = function() {
 	}
 };
 
-rh.chorewheel.membersInit = function() {};
+rh.chorewheel.membersInit = function() {
+	$(".members-delete-button").click(function() {
+		var key = $(this).closest(".mdl-card__title").find(".user-key").html();
+		$("#members-delete-key").val(key);
+
+		document.querySelector("#members-delete-dialog").showModal();
+	});
+
+	$(".members-edit-button").click(function() {
+		var key = $(this).closest(".mdl-card__title").find(".user-key").html();
+		$("#members-edit-key").val(key);
+
+		document.querySelector("#chores-edit-dialog").showModal();
+
+		$("#chores-edit-key").val(key);
+		document.querySelector("#chores-edit-name").MaterialTextfield.change(name);
+		document.querySelector("#chores-edit-due").MaterialTextfield.change(due);
+		document.querySelector("#chores-edit-points").MaterialTextfield.change(points);
+		$("#chores-edit-dialog input[name=frequency]").attr("data-val", frequency);
+	});
+};
 
 rh.chorewheel.sortableInit = function() {
 	var stop = function(el, li) {
