@@ -151,14 +151,14 @@ rh.chorewheel.choreInsertInit = function() {
 
 rh.chorewheel.membersInit = function() {
 	$(".members-delete-button").click(function() {
-		var key = $(this).closest(".mdl-card__title").find(".user-key").html();
+		var key = $(this).closest(".mdl-card").find(".user-key").html();
 		$("#members-delete-key").val(key);
 
 		document.querySelector("#members-delete-dialog").showModal();
 	});
 
 	$(".members-edit-button").click(function() {
-		var key = $(this).closest(".mdl-card__title").find(".user-key").html();
+		var key = $(this).closest(".mdl-card").find(".user-key").html();
 		$("#members-edit-key").val(key);
 
 		document.querySelector("#members-edit-dialog").showModal();
