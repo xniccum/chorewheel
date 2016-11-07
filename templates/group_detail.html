@@ -76,7 +76,7 @@
 					    {% for admin in admins %}
 							{% if admin.urlsafe() == user_key.urlsafe() %}
 								<div class="mdl-card__actions mdl-card--border">
-									<button class="mdl-button mdl-js-button">
+									<button class="mdl-button mdl-js-button members-edit-button">
 										<i class="material-icons">edit</i>
 									</button>
 									<button class="mdl-button mdl-js-button members-delete-button">
@@ -118,14 +118,15 @@
 <h4 class="mdl-dialog__title">Edit Member</h4>
 <form action="/edit-member" method="post">
 	<div class="mdl-dialog__content">
-		<input style="display: none;" type="text" name="key" id="members-edit-key">
-        <label id="member-edit-admin" for="member_admin" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
-            <input type="checkbox" class="mdl-checkbox__input" name="is_admin">
-			<span class="mdl-checkbox__label">Admin</span>
+		<input style="display: none;" type="text" name="member-key" id="members-edit-key">
+		<input style="display: none;" type="text" name="group-key" value="{{ groupkey.urlsafe() }}">
+		<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"
+			for="admin"> <span class="mdl-checkbox__label">Admin?</span>
+			<input type="checkbox" name="admin" id="admin" class="mdl-checkbox__input">
 		</label>
 	</div>
 	<div class="mdl-dialog__actions">
-		<button type="button" class="mdl-button">Save</button>
+		<button type="submit" class="mdl-button">Save</button>
 		<button type="button" class="mdl-button close">Cancel</button>
 	</div>
 </form>
@@ -137,6 +138,7 @@
 	<div class="mdl-dialog__content">
 		<input style="display: none;" type="text" name="member-key"
 			id="members-delete-key">
+		<input style="display: none;" type="text" name="group-key" value="{{ groupkey.urlsafe() }}">
 		<p>
 			Are you sure you want to delete the member <span class="member-name"></span>
 		</p>

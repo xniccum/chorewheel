@@ -38,10 +38,12 @@ class InsertMember(base_handlers.BaseAction):
         if self.request.get("member-key"):
             member_key = ndb.Key(urlsafe=self.request.get("member-key"))
             if bool(self.request.get("admin")):
+                group.admins.remove(member_key)
                 group.admins.append(member_key)
             else:
                 group.admins.remove(member_key)
             group.put()
+            self.redirect('/groups?group-key='+self.request.get("group-key"))
         else:
             member = User.query(ancestor=User.PARENT_KEY).filter(User.email == self.request.get("email")).get()
             if not member:
@@ -53,15 +55,17 @@ class InsertMember(base_handlers.BaseAction):
                 group.admins.append(key)
             group.members.append(key)
             group.put()
-        self.redirect(users.create_login_url('/login-success?group-key='+self.request.get("group-key")))
-        #self.redirect('/groups?group-key='+self.request.get("group-key"))
+            self.redirect(users.create_login_url('/login-success?group-key='+self.request.get("group-key")))
 
 
 class DeleteMember(base_handlers.BaseAction):
     def handle_post(self, user):
         # Delete member from group
         member_key = ndb.Key(urlsafe=self.request.get('member-key'))
-        group_key = self.request.get("group-key")
+        group_key = ndb.Key(urlsafe=self.request.get("group-key"))
+        member = member_key.get()
+        member.groups.remove(group_key)
+        member.put()
         group = group_key.get()
         group.members.remove(member_key)
         group.admins.remove(member_key)
