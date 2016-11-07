@@ -28,7 +28,7 @@
 				<li class="mdl-list__item">
 					<span class="chore-key hidden">{{ chore.key.urlsafe() }}</span>
 					<span class="chore-frequency hidden">{{ chore.frequency }}</span>
-					{{ chore.name }} ({{ chore.points }})
+					{{ chore.name }} ({{ chore.points }}) - Due {{ chore.due.strftime("%m/%d") }}
 					{% for admin in admins %}
 						{% if admin.urlsafe() == user_key.urlsafe() %}
 							<a
@@ -62,7 +62,7 @@
 						{% if chore.assigned_to and chore.assigned_to.urlsafe() == member.key.urlsafe() and not chore.readyForApproval %}
 							<li class="mdl-list__item">
 								<span class="chore-key hidden">{{ chore.key.urlsafe() }}</span>
-								{{ chore.name }} ({{ chore.points }})
+								{{ chore.name }} ({{ chore.points }}) - Due {{ chore.due.strftime("%m/%d") }}
 								{% if (chore.assigned_to and chore.assigned_to.urlsafe() == user_key.urlsafe() and not
 									chore.readyForApproval) %}
 										<button class="mdl-button mdl-js-button mark-for-approval">
@@ -98,7 +98,7 @@
 			{% if chore.readyForApproval %}
 				<li class="mdl-list__item">
 					<span class="chore-key hidden">{{ chore.key.urlsafe() }}</span>
-					{{ chore.name }} ({{ chore.points }})
+					{{ chore.name }} ({{ chore.points }}) - Due {{ chore.due.strftime("%m/%d") }}
 					{% if (chore.assigned_to and chore.assigned_to.urlsafe() != user_key.urlsafe() and
 						chore.readyForApproval) %}
 						<button class="mdl-button mdl-js-button mark-approved">
