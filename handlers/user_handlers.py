@@ -38,10 +38,11 @@ class InsertMember(base_handlers.BaseAction):
         if self.request.get("member-key"):
             member_key = ndb.Key(urlsafe=self.request.get("member-key"))
             if bool(self.request.get("admin")):
-                group.admins.remove(member_key)
-                group.admins.append(member_key)
+                if member_key not in group.admins:
+                    group.admins.append(member_key)
             else:
-                group.admins.remove(member_key)
+                if member_key in group.admins:
+                    group.admins.remove(member_key)
             group.put()
             self.redirect('/groups?group-key='+self.request.get("group-key"))
         else:
@@ -50,6 +51,8 @@ class InsertMember(base_handlers.BaseAction):
                 member = User(parent=User.PARENT_KEY,
                               email=self.request.get("email"),
                               groups=[group_key])
+            else:
+                member.groups.append(group_key)
             key = member.put()
             if self.request.get("admin"):
                 group.admins.append(key)
