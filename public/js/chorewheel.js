@@ -166,8 +166,8 @@ rh.chorewheel.membersInit = function() {
 };
 
 rh.chorewheel.sortableInit = function() {
-	var stop = function(el, li) {
-		$this = $(li.item);
+	var stop = function(event, ui) {
+		$this = $(ui.item);
 		var sorter = $(this);
 		var choreKey = $this.find(".chore-key").html();
 		console.log($this.closest(".mdl-card"));
@@ -209,7 +209,7 @@ rh.chorewheel.sortableInit = function() {
 		appendTo: document.body,
 		helper: "clone",
 		connectWith: ".assigned-chores, .chores-list",
-		items: "> li",
+		items: "> .mdl-list__item",
 		stop: stop,
 		scroll: true
 	});

@@ -50,6 +50,9 @@ table > th {
 
 .home-card {
   margin: 30px 5%;
+  position: absolute;
+  top: 30%;
+  left: 35%;
 }
 
 .home-card .mdl-cell {
